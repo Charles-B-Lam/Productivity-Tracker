@@ -3,11 +3,10 @@ import {Routes, Route} from "react-router-dom"
 import Calendar from './Calendar';
 import TaskList from './TaskList';
 import Timer from './Timer';
-import Home from './Home';
+import Home from './Home/Home';
 import TodoComponent from '../../todo/TodoComponent';
 import { TodosContextProvider } from '../../Todo-Context/todo-context';
 import TimerFeature from '../TimerFeature/TimerFeature';
-
 
 
 

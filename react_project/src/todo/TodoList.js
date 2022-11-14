@@ -19,6 +19,7 @@ const TodoList = props => {
             <TodoTask 
             key={task.id}
             id={task.id}
+            status={task.status}
             text={task.text}
             start={task.start}
             end={task.end}

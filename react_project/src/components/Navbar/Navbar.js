@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom'
 import { navBarData } from './navBarData'
 import './Navbar.css'
 
-import { FcTodoList } from "react-icons/fc";
 
 {/*This is the component for the top nav bar and how it will look */}
 const Navbar = () => {

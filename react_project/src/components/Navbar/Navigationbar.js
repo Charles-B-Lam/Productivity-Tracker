@@ -2,7 +2,7 @@ import React from 'react'
 import {Routes, Route} from "react-router-dom"
 import Login from './Login/Login';
 import Signup from './Signup/Signup';
-import Home from '../Sidepage/Home';
+import Home from '../Sidepage/Home/Home';
 
 
 //This function is when you click login or signup, it display the

@@ -13,7 +13,7 @@ const DeleteModal = props => {
 
     return(
         <div className='modal'>
-            <p>Are you sure?</p>
+            <p>Are you sure you want to delete this task?</p>
             <button className='btn btn--alt' onClick={onCancel}>Cancel</button>
             <button className='btn' onClick={onConfirm}>Delete</button>
         </div>
