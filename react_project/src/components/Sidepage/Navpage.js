@@ -20,7 +20,7 @@ function Navpage() {
         <section>
             <Routes>
               <Route path="/home" element={<Home/>} />
-              <Route path="/tasklist" element={<TodoComponent />} />
+              <Route path="/tasklist" element={<TodosContextProvider><TodoComponent /></TodosContextProvider>} />
               <Route path="/calendar" element={<Calendar/>} />
               <Route path="/timer" element={<TimerFeature />} />
             </Routes>

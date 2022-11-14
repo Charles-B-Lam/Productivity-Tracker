@@ -16,15 +16,15 @@ const TodoComponent = () => {
 
         setModalOpen(true);
 
-        const newTask = {
-            id: Math.random().toString(),
-            text: "hw",
-            status: "",
-            start: "",
-            end: "",
-            priority: ""
-        }
-        todoList.addTodo(newTask);
+        // const newTask = {
+        //     id: Math.random().toString(),
+        //     text: "hw",
+        //     status: "",
+        //     start: "",
+        //     end: "",
+        //     priority: ""
+        // }
+        // todoList.addTodo(newTask);
     }
 
     const confirmAdd = props => { 
