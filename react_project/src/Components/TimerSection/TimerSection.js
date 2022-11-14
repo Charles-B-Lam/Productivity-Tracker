@@ -1,6 +1,6 @@
 import React, {useState, useRef, useEffect} from 'react';
 
-import './TimerSection.css';
+import './TimerSection.css'
 import PastTimesList from '../PastTimesList/PastTimesList'
 import TimeValue from '../TimeValue/TimeValue'
 const { v4: uuidv4 } = require('uuid');
