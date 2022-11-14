@@ -6,7 +6,20 @@ nav {
     background-color: lightgrey;
     border: 2px solid black;
     width: 100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
     margin: 30px 0 30px 0;
+}
+
+#save{
+    color: white;
+    background-color: blue;
+}
+
+/* styles applies to all buttons */
+button {
+    border-radius: 5px;
+    padding: 5px;
 }
 
 .timedSection{

@@ -1,23 +1,14 @@
-nav {
+.row {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     background-color: lightgrey;
-    /* padding-left: 50px; */
-    width: 100%;
     border: 2px solid grey;
+    padding: 5px;
+    width: 100%;
+    justify-content: space-around;
 }
 
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+span {
+    padding-top: 10px;
 }
-
-ul li {
-    /* display: inline-block;  */
-    /* color: white; */
-    /* Horizontal menu items with no bullets */
-    list-style: none;
-    margin-left: 100px;
-  }

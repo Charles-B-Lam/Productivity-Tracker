@@ -12,29 +12,25 @@ function Time({time, deletePastTime}) {
   }
 
   return (
-    <>
-      <nav>
-        <ul className='row'>
-          {/* // controls each row in the PastTimesList */}
-            <li><IconButton color="primary" aria-label="play-button" component="label" onClick={handleDelete}>
-              <BsXCircle />
-            </IconButton> </li>
+      <nav className="row">
+        {/* // controls each row in the PastTimesList */}
+          <IconButton color="primary" aria-label="play-button" component="label" onClick={handleDelete}>
+            <BsXCircle />
+          </IconButton>
 
-            <li><><p>{time.name}</p>
-            <TimeValue timeValue={time.timeValue} /></></li>
+          <span><p>{time.name}</p></span>  
+          <span><TimeValue timeValue={time.timeValue} /></span>
 
-            <li><div className='buttons'>
-              <IconButton color="primary" aria-label="pause-button" component="label">
-                <BsFillPauseFill />
-              </IconButton>
+          <div className='buttons'>
+            <IconButton color="primary" aria-label="pause-button" component="label">
+              <BsFillPauseFill />
+            </IconButton>
 
-              <IconButton color="primary" aria-label="play-button" component="label">
-                <BsFillPlayFill />
-              </IconButton>
-            </div> </li>
-        </ul>
+            <IconButton color="primary" aria-label="play-button" component="label">
+              <BsFillPlayFill />
+            </IconButton>
+          </div> 
       </nav>
-    </>
   ) // return
 } // Time
 

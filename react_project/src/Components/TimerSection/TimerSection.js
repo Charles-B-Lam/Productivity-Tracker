@@ -3,40 +3,52 @@ import React, {useState, useRef, useEffect} from 'react';
 import './TimerSection.css';
 import PastTimesList from '../PastTimesList/PastTimesList'
 import TimeValue from '../TimeValue/TimeValue'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const { v4: uuidv4 } = require('uuid');
 
 function TimerSection() {
 
   // we are going to have access to the input element that involves the "time name" via tmeNameRef variable
   const timeNameRef = useRef()
-  const LOCAL_STORAGE_KEY = 'timeFeature.times'
+  const hourInput = useRef()
+  const minInput = useRef()
+  const secInput = useRef()
+  var calculatedTime = 0
+
+  // const LOCAL_STORAGE_KEY = 'timeFeature.times'
 
   const [timeValue, setTime] = useState(0)
+  const [timeValue2, setTime2] = useState(1)
   // This is the past times list. That should create a new instance of a past time 
   const[pastTimes, setPastTimes] = useState([]) 
   const[buttonName, setButtonText] = useState("Start") // default set to "Start" text for the button
-  const [isStarted, setIsActive] = useState(false);   // controls the color of the button
+  const [isStarted, setIsActive] = useState(false);   // controls the color of the button and the stop watch
+  const [isStarted2, setIsActive2] = useState(false);   // controls the color of the button
+  const[warningMsg, setWarningText] = useState("") // default set to "Start" text for the button
 
-  // LOADING
-  // call this once our right when our component loads
-  // pass in an empty array of dependencies in order to call this funciton only once b/c empty array never changes
-  useEffect(() => {
-    // getting the storedTimes from local storage.
-    const storedTimes = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) // parsing the JSON string
+  // // LOADING
+  // // call this once our right when our component loads
+  // // pass in an empty array of dependencies in order to call this funciton only once b/c empty array never changes
+  // useEffect(() => {
+  //   // getting the storedTimes from local storage.
+  //   const storedTimes = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) // parsing the JSON string
 
-    // set our Past Times only if we have any past times stored
-    // set storedTimes to the previous Times.
-    if (storedTimes) setPastTimes(prevTimes => [...prevTimes, ...storedTimes])
-  }, [])
+  //   // set our Past Times only if we have any past times stored
+  //   // set storedTimes to the previous Times.
+  //   if (storedTimes) setPastTimes(prevTimes => [...prevTimes, ...storedTimes])
+  // }, [])
 
-  // SAVING
-  // store the times in local storage so we use this hook to do so.
-  // So everytime a time is added to a list, it is saved.
-  // useEffect takes in another function that helps us save the "pastTimes" everytime it is changed.
-  useEffect(() => {
-    // we pass the key and the JSON string of our pastTimes
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(pastTimes))
-  }, [pastTimes]) // the function call occurs everytime pastTimes is modified
+  // // SAVING
+  // // store the times in local storage so we use this hook to do so.
+  // // So everytime a time is added to a list, it is saved.
+  // // useEffect takes in another function that helps us save the "pastTimes" everytime it is changed.
+  // useEffect(() => {
+  //   // we pass the key and the JSON string of our pastTimes
+  //   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(pastTimes))
+  // }, [pastTimes]) // the function call occurs everytime pastTimes is modified
+
+
 
   // the use effect function takes in a function and an array. the use effect function runs when the component is rendered.
   // pass the setIsActive var into the array so we can control when this useEffect function is ran.
@@ -57,12 +69,22 @@ function TimerSection() {
     } else {
       // timer off
       clearInterval(interval) // stop our timer by clearing the interval that has been set.
+      // console.log(timeValue) // check work
     } // if-else
 
     // cleanup function that helps avoid memory leak when the component get unmounted
     // makes sure to stop the interval when the user leaves the page.
     return () => clearInterval(interval) 
   }, [isStarted])
+
+  // SAVE BUTTOn
+  // useEffect(() => {
+  //   if(isStarted2) {
+  //     // timer on so initialize this interval
+  //     setTime2(calculatedTime)
+  //   }
+  //   setIsActive2(current => !current);
+  // }, [isStarted2, calculatedTime])
 
   function handleResetButton(e) {
     setTime(0);
@@ -73,49 +95,105 @@ function TimerSection() {
   } // handleStartButton
   
   function handleStartButton(e) {
-    let count = 0; // starts at 0. 
-    count++;
+    const timeName = timeNameRef.current.value
+
+    // warning message
+    if (timeName === '') {
+      setWarningText("Must name the task!")
+      notifyWarning()
+      return // return nothing when there is nothing in input box
+    } 
+
     // returns the opposite boolean value that control the red/green color on the button
     // setIsActive uses lambda expression that accepts curret as parameter and returns opposite of current
     setIsActive(current => !current); // if started as false then it will become true when button is pressed
 
-    if (buttonName == "Start") {
+    if (buttonName === "Start") {
       setButtonText("Stop");
-    } else if (buttonName == "Stop") {
+    } else if (buttonName === "Stop") {
+      setTime(0) // reset to 0
       setButtonText("Start");
     } // else-if
 
     // doesn't compute until the button is pressed
     if (isStarted) {
       // console.log("save to the list") // check
-      handleSaveButton() // doesn't actually work until "past time name" is set
-    }
+          // is a function call that gives us the prevTimes which we are going to add too.
+      setPastTimes(prevTimes => {
+        // our new timeslist is going to be equal to (...prevTimes in the array + a new time) to that list
+        return [...prevTimes, {id: uuidv4(), name: timeName, timeValue: timeValue}]
+      })
+      
+      console.log("In handleStartButton" + timeValue)
+      // reset the ":time input name" everytime the button is pressed
+      timeNameRef.current.value = null
+      notifySuccess()
+    } // if
   } // handleStartButton
 
   function handleSaveButton(e) {
+
+    // WARNING messages
     // element we are currently referencing that has a value.
     const timeName = timeNameRef.current.value
-    if (timeName == '') return // return nothing when there is nothing in input box
+    const hour = hourInput.current.value
+    const minute = minInput.current.value
+    const second = secInput.current.value
+    calculatedTime = (hour*3600000) + (minute*60000) + (second*1000)
 
-    // setTodos([]) // would clear all todos
+    // setIsActive2(current => !current);
 
-    // is a function call that gives us the prevTimes which we are going to add too.
-    setPastTimes(prevTimes => {
-      // our new timeslist is going to be equal to (...prevTimes in the array + a new time) to that list
-      return [...prevTimes, {id: uuidv4(), name: timeName, timeValue: timeValue}]
-    })
-    
-    // console.log(timeName)
-    // reset the ":time input name" everytime the button is pressed
-    timeNameRef.current.value = null
-  }
+    // console.log("before " + timeValue2)
+    // setTime2(0) // start at 0
+    // console.log("after " + timeValue2)
+
+    if (timeName === '') {
+      setWarningText("Must name the task!")
+      notifyWarning()
+      return // return nothing when there is nothing in input box
+    } else if (hour >= 24) {
+      setWarningText("Choose an hour less than 24!")
+      notifyWarning()
+      return
+    } else if (minute >= 60) {
+      setWarningText("Choose a minute less than 60!")
+      notifyWarning()
+      return
+    } else if (second >= 60) {
+      setWarningText("Choose a second less than 60!")
+      notifyWarning()
+      return
+    } else {
+      console.log(hour)
+      console.log(minute)
+      console.log(second)
+      setTime2((hour*3600000) + (minute*60000) + (second*1000))
+      console.log("After calculation " + timeValue2)
+      // calculatedTime = (hour*3600000) + (minute*60000) + (second*1000)
+      // console.log("calculated time" + calculatedTime)
+  
+      // is a function call that gives us the prevTimes which we are going to add too.
+      setPastTimes(prevTimes => {
+        // our new timeslist is going to be equal to (...prevTimes in the array + a new time) to that list
+        return [...prevTimes, {id: uuidv4(), name: timeName, timeValue: timeValue2}]
+      })
+      
+      // console.log(timeName)
+      // reset the ":time input name" everytime the button is pressed
+      timeNameRef.current.value = null
+      hourInput.current.value = null
+      minInput.current.value = null
+      secInput.current.value = null
+      notifySuccess()
+    } // else 
+  } // handleSaveButton
 
   function deletePastTime(id) {
     // make a copy of the current pastTimes b/c we don't want to change the current list of past times
     // but instead modify the copy, and set the new state to that copy. We should never modify the state variable.
     const newTimes = [...pastTimes]
     // finding the "time" in the list of past times that has the matching id.
-    const pastTime = newTimes.find(time => time.id == id)
+    const pastTime = newTimes.find(time => time.id === id)
 
     console.log(pastTime)
     const index = newTimes.indexOf(pastTime) // find index of the time in the past times list
@@ -124,15 +202,41 @@ function TimerSection() {
     setPastTimes(newTimes)
   }
 
+  function notifySuccess() {
+    toast.success('Time Saved', {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      });
+  };
+
+  function notifyWarning() {
+    toast.warn(warningMsg, {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      });
+  }
+
   return (
     <>
       <nav>
         <ul className="timedSection">
             {/* <!-- This will hold the topic that we want to time  --> */}
             <li className="nav-item"><input id="topicInput" type="text" placeholder="Task" autoComplete="off" ref={timeNameRef}></input></li>
-            <li className="nav-item"><input id="hourInput" type="number" placeholder="hour"></input></li>
-            <li className="nav-item"><input id="minInput" type="number" placeholder="minute"></input></li>
-            <li className="nav-item"><input id="secInput" type="number" placeholder="second"></input></li>
+            <li className="nav-item"><input ref={hourInput} type="number" placeholder="hour"></input></li>
+            <li className="nav-item"><input ref={minInput} type="number" placeholder="minute"></input></li>
+            <li className="nav-item"><input ref={secInput} type="number" placeholder="second"></input></li>
             <li className="nav-item"><button type="button" onClick={handleSaveButton} id="save">save</button></li>
         </ul>
         <ul className="timedSection">
@@ -169,6 +273,19 @@ function TimerSection() {
         </ul>
       </nav>
       <PastTimesList pastTimes={pastTimes} deletePastTime={deletePastTime} />
+      {/* renders our toast notification and sets a specific style for all notificaitons */}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        />
     </>
   );
 };

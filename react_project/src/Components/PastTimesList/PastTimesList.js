@@ -9,6 +9,7 @@ function PastTimesList({pastTimes, deletePastTime}) {
     // <div>
     //   {pastTimes.length}
     // </div>
+    
     pastTimes.map(time => {
       // passing the key and the time object with the attributes to the Time component
       return < Time key={time.id} time={time} deletePastTime={deletePastTime}/>
