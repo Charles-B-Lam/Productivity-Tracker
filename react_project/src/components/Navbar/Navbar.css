@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');
+
+/*css for top header navigation bar*/
+.navbar{
+    width: auto;
+    display: flex;
+    background-color:black;
+    height: 80px;
+    align-items: center;
+    /*margin-left: 16px;*/
+    color: white;
+    column-gap: 5px;
+    font-family: 'Caveat', cursive;
+}
+
+/* Icon top nav */
+.topNavIcon{
+    color: white;
+    font-size: 26px;
+}
+
+/*title */
+.title{
+    color: white;
+    font-size: 30px;
+    font-size: 30px;
+    line-height: 36px;
+    text-decoration: underline;
+}
+
+.signLogin{
+    font-size: 25px;
+    text-decoration: none;
+    padding: 20px;
+    color: white;
+    
+}
+
+.signLogin:hover{
+    color: rgb(255, 0, 98);
+}
+
+.register{
+    display: flex;
+    margin-left:auto;
+    margin-right: 15px;
+}
+
+
+
+
+
+@media(max-width: 700px) {
+    .navbar{
+       flex-direction: row;
+    }
+
+
+}

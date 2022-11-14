@@ -1,0 +1,127 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Bubbles&display=swap');
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+/*modalBackground*/
+.container{
+    width: auto;
+    height: 100vh;
+    display: flex;
+    background-color: rgba(200, 200, 200);
+    justify-content: center;
+    align-items: center;
+
+}
+
+/*modalContainer*/
+.app-wrapper{
+    width: 500px;
+    height: 500px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: rgba(0,0,0.35) 0px 5px 15px;
+    display: flex;
+    flex-direction: column;
+    padding: 5px 0px 60px 0px;
+
+}
+
+.title-signup{
+    color: black;
+    text-decoration: underline;
+    font-size: 30px;
+    text-align: center;
+    margin: 50px 0px 40px 0px;
+    font-family: 'Rubik Bubbles', cursive;
+}
+
+.name,
+.email, .password{
+    margin: 20px;
+    color: black;
+    font-size: 20px;
+    font-family: 'Rubik Bubbles', cursive;
+}
+
+.password:focus-within label{
+    color:#FE4880;
+}
+
+.name:focus-within label{
+    color:#FE4880;
+}
+.email:focus-within label{
+    color:#FE4880;
+}
+
+.password{
+    margin-bottom: 40px;
+}
+
+.input{
+    height: 32px;
+    font-size: 20px;
+    outline: none;
+    width: 100%; 
+    border-top-style:none;
+    border-left-style: none;
+    border-right-style: none;
+    border-bottom-style: 2px solid black;
+    margin-bottom: 10px;
+}
+
+.error{
+    color: red;
+    font-size: 15px;
+}
+
+.submit{
+    display: flex;
+    font-family: 'Rubik Bubbles', cursive;
+    text-transform: uppercase;
+    font-size: 20px;
+    border-radius: 25px;
+    color: black;
+    padding: 10px 60px;
+    background: linear-gradient(to right, #a944c3, #FE4880);
+    box-shadow: rba(0, 0, 0, 0.3) 0px 19px 38px, rgba(148, 66, 66, 0.22);
+    margin: auto;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.submit:hover{
+    background-position: 100% 0%;
+}
+
+/*Make the button move when you click on it*/
+button:active{
+    transform: translate(2px);
+}
+
+.form-success{
+    display: flex;
+    justify-content: center;
+    margin-top: 250px;
+    min-width: 370px;
+    color: red;
+}
+
+@media all and (max-width: 600px){ 
+
+    .app-wrapper{
+        width: fit-content;
+        block-size: fit-content;
+    }
+    
+   
+
+
+}
+
+
+
