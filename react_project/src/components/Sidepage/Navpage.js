@@ -4,6 +4,10 @@ import Calendar from './Calendar';
 import TaskList from './TaskList';
 import Timer from './Timer';
 import Home from './Home';
+import TodoComponent from './todo/TodoComponent';
+import { TodosContextProvider } from './Todo-Context/todo-context.js'
+import TimerFeature from './Components/TimerFeature/TimerFeature';
+
 
 
 
@@ -15,8 +19,8 @@ function Navpage() {
     <React.Fragment>
         <section>
             <Routes>
-              <Route path="/home" element={<Home/>} />
-              <Route path="/tasklist" element={<TaskList/>} />
+              <Route path="/home" element={<TodoComponent />} />
+              <Route path="/tasklist" element={<TimerFeature />} />
               <Route path="/calendar" element={<Calendar/>} />
               <Route path="/timer" element={<Timer/>} />
             </Routes>
