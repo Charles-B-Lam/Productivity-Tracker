@@ -1,12 +1,11 @@
 import React from 'react'
+import Homepage from './Homepage'
 
 function Home() {
     return (
         <React.Fragment>
             <section>
-                <div>
-                  Home
-                </div>
+                <Homepage/>
             </section>
         </React.Fragment>
       )
