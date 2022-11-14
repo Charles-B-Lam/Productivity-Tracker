@@ -1,24 +1,17 @@
 import logo from './logo.svg';
 import './App.css';
+import TodoComponent from './todo/TodoComponent';
+import React, { Fragment } from 'react';
+import { TodosContextProvider } from './Todo-Context/todo-context.js'
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <TodosContextProvider>
+      {/* <React.Fragment> */}
+        <TodoComponent />
+      {/* </React.Fragment> */}
+    </TodosContextProvider>
   );
 }
 
