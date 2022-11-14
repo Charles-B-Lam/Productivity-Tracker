@@ -13,22 +13,13 @@ const TodoComponent = () => {
     const [modalOpen, setModalOpen] = useState(false);
 
     function todoListHandler(props) {
-
         setModalOpen(true);
-
-        // const newTask = {
-        //     id: Math.random().toString(),
-        //     text: "hw",
-        //     status: "",
-        //     start: "",
-        //     end: "",
-        //     priority: ""
-        // }
-        // todoList.addTodo(newTask);
     }
 
     const confirmAdd = props => { 
+        todoList.addTodo(props);
         setModalOpen(false);
+        console.log(props);
     }
 
     const closeModal = props => {
@@ -41,9 +32,9 @@ const TodoComponent = () => {
             <div className='grid-container-tasks'>
                 <button className='add-button' type='submit' onClick={todoListHandler}>Add task</button>
             </div>
-           <TodoList todos={todoList.todos}/>
-           { modalOpen && <AddModal onCancel={closeModal} onConfirm={confirmAdd} />}
-           { modalOpen && <BackDrop onCancel={closeModal}/> }
+            { modalOpen && <AddModal onCancel={closeModal} onConfirm={confirmAdd}/>}
+            { modalOpen && <BackDrop onCancel={closeModal}/> }
+            <TodoList todos={todoList.todos}/>
         </div>
     );
 }
