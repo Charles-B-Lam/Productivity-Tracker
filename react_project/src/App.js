@@ -7,9 +7,7 @@ import TimerFeature from './Components/TimerFeature/TimerFeature';
 function App() {
   return (
     <TodosContextProvider>
-      {/* <React.Fragment> */}
-        <TodoComponent />
-      {/* </React.Fragment> */}
+      <TodoComponent />
       <TimerFeature />
     </TodosContextProvider>
   );
