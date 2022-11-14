@@ -1,9 +1,8 @@
-import logo from './logo.svg';
+import React from "react";
 import './App.css';
 import TodoComponent from './todo/TodoComponent';
-import React, { Fragment } from 'react';
 import { TodosContextProvider } from './Todo-Context/todo-context.js'
-
+import TimerFeature from './Components/TimerFeature/TimerFeature';
 
 function App() {
   return (
@@ -11,6 +10,7 @@ function App() {
       {/* <React.Fragment> */}
         <TodoComponent />
       {/* </React.Fragment> */}
+      <TimerFeature />
     </TodosContextProvider>
   );
 }
