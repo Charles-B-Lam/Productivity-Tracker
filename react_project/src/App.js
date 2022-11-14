@@ -1,15 +1,17 @@
-import React from "react";
+import React from 'react';
 import './App.css';
-import TodoComponent from './todo/TodoComponent';
-import { TodosContextProvider } from './Todo-Context/todo-context.js'
-import TimerFeature from './Components/TimerFeature/TimerFeature';
+import MainPage from './components/Mainpage/MainPage';
+import {BrowserRouter} from "react-router-dom"
+import Navbar from './components/Navbar/Navbar';
+
 
 function App() {
   return (
-    <TodosContextProvider>
-      <TodoComponent />
-      <TimerFeature />
-    </TodosContextProvider>
+    <React.Fragment>
+      <BrowserRouter>
+        <MainPage/>
+      </BrowserRouter>
+    </React.Fragment>
   );
 }
 
