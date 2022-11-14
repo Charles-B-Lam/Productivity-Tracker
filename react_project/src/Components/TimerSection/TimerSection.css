@@ -1,0 +1,22 @@
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: lightgrey;
+    border: 2px solid black;
+    width: 100%;
+    margin: 30px 0 30px 0;
+}
+
+.timedSection{
+    display: flex;
+}
+
+.nav-item {
+    /* display: inline-block;  */
+    /* color: white; */
+    /* Horizontal menu items with no bullets */
+    list-style: none;
+    margin-left: 20px;
+  }
