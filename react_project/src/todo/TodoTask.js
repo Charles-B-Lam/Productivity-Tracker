@@ -32,7 +32,7 @@ const TodoTask = props => {
                         <div className='grid-item-tasks-title' >
                             {props.text}
                             </div>
-                        <div className='grid-item-tasks' >
+                        <div className='grid-item-tasks-status' >
                         <select name="status" className='custom-select'>
                             <option value="" selected disabled hidden>{props.status}</option>
                             <option value="Not started">Not started</option>

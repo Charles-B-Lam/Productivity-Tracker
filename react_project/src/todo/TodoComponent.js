@@ -27,15 +27,15 @@ const TodoComponent = () => {
     }
 
     return (
-        <div>
-            <TodoHeader />
-            <div className='grid-container-tasks'>
-                <button className='add-button' type='submit' onClick={todoListHandler}>Add task</button>
+            <div>
+                <TodoHeader />
+                <div className='grid-container-tasks-button'>
+                    <button className='add-button' type='submit' onClick={todoListHandler}>Add task</button>
+                </div>
+                { modalOpen && <AddModal onCancel={closeModal} onConfirm={confirmAdd}/>}
+                { modalOpen && <BackDrop onCancel={closeModal}/> }
+                <TodoList todos={todoList.todos}/>
             </div>
-            { modalOpen && <AddModal onCancel={closeModal} onConfirm={confirmAdd}/>}
-            { modalOpen && <BackDrop onCancel={closeModal}/> }
-            <TodoList todos={todoList.todos}/>
-        </div>
     );
 }
 
