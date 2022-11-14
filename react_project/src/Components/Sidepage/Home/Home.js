@@ -10,7 +10,6 @@ function Home() {
             </section>
         </React.Fragment>
       )
-
 }
 
 export default Home
