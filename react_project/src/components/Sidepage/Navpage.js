@@ -7,8 +7,6 @@ import Home from './Home/Home';
 import TodoComponent from '../../todo/TodoComponent';
 import { TodosContextProvider } from '../../Todo-Context/todo-context';
 import TimerFeature from '../TimerFeature/TimerFeature';
-import Home from './Home/Home';
-
 
 
 
