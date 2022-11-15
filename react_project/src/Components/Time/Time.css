@@ -9,6 +9,10 @@
     justify-content: space-around;
 }
 
+.time {
+    padding-top: 10px;
+}
+
 span {
     padding-top: 10px;
 }
