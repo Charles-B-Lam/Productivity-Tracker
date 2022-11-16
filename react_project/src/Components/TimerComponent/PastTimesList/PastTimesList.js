@@ -1,6 +1,5 @@
 import React from 'react';
 
-import "./PastTimesList.css"
 import Time from "../Time/Time"
 
 // The Past Times component is a list of all the previous times

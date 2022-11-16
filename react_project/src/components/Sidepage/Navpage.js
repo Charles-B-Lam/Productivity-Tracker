@@ -1,18 +1,17 @@
 import React from 'react'
 import {Routes, Route} from "react-router-dom"
 import Calendar from './Calendar';
-import TaskList from './TaskList';
-import Timer from './Timer';
 import Home from './Home/Home';
 import TodoComponent from '../../todo/TodoComponent';
 import { TodosContextProvider } from '../../Todo-Context/todo-context';
-import TimerFeature from '../TimerFeature/TimerFeature';
+import TimerFeature from '../TimerComponent/TimerFeature/TimerFeature';
 
 
 
-{/*This route take you to the content of the side bar menu
-  if you click home, it take you to home content
-*/}
+/*
+ * This route take you to the content of the side bar menu
+ * if you click home, it take you to home content
+ */
 function Navpage() {
   return (
     <React.Fragment>

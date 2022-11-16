@@ -13,12 +13,10 @@ function TimerSection() {
   const hourInput = useRef()
   const minInput = useRef()
   const secInput = useRef()
-  var calculatedTime = 0
 
   // const LOCAL_STORAGE_KEY = 'timeFeature.times'
 
   const [timeValue, setTime] = useState(0)
-  const [timeValue2, setTime2] = useState(0)
   // This is the past times list. That should create a new instance of a past time 
   const[pastTimes, setPastTimes] = useState([]) 
   const[buttonName, setButtonText] = useState("Start") // default set to "Start" text for the button
@@ -46,6 +44,8 @@ function TimerSection() {
   //   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(pastTimes))
   // }, [pastTimes]) // the function call occurs everytime pastTimes is modified
 
+
+  // STARTING THE TIMER
   // the use effect function takes in a function and an array. the use effect function runs when the component is rendered.
   // pass the setIsActive var into the array so we can control when this useEffect function is ran.
   // when setIsActive is changed that is when this function is executed.
@@ -125,34 +125,61 @@ function TimerSection() {
 
   function handleHour(e) {
     const hour = hourInput.current.value
+
+    // if there is already a value for setTime
     if (hour >= 24) {
       setWarningText("Choose an hour less than 24!")
       notifyWarning()
+      setTime(0)
       return
+    } else if (hour < 0) {
+      setWarningText("Choose an hour greater than equal to 0")
+      notifyWarning()
+      setTime(0)
+      return
+    } else {
+      let hourInMilliseconds = hour*3600000
+      setTime(hourInMilliseconds)
+      handleMinute(hourInMilliseconds)
     }
-    setTime(prevTime => prevTime + (hour*3600000))
   }
 
-  function handleMinute(e) {
+  function handleMinute(hourInMilliseconds) {
     const minute = minInput.current.value
     if (minute >= 60) {
       setWarningText("Choose a minute less than 60!")
       notifyWarning()
+      setTime(0)
       return
+    } else if (minute< 0) {
+      setWarningText("Choose a minute greater than equal to 0")
+      notifyWarning()
+      setTime(0)
+      return
+    } else {
+      let minuteInMilliseconds = minute*60000
+      setTime(hourInMilliseconds + minuteInMilliseconds)
+      handleSecond(hourInMilliseconds, minuteInMilliseconds)
     }
-    setTime(prevTime => prevTime + (minute*60000))
   }
 
-  function handleSecond(e) {
+  function handleSecond(hourInMilliseconds, minuteInMilliseconds) {
     const second = secInput.current.value
     if (second >= 60) {
       setWarningText("Choose a second less than 60!")
       notifyWarning()
+      setTime(0)
       return
+    } else if (second < 0) {
+      setWarningText("Choose a second greater than equal to 0")
+      notifyWarning()
+      setTime(0)
+      return
+    } else {
+      let secondsInMilliseconds = second*1000
+      setTime(secondsInMilliseconds + minuteInMilliseconds + hourInMilliseconds)
     }
-    setTime(prevTime => prevTime + (second*1000))
   }
-
 
   function handleSaveButton(e) {
 
@@ -188,10 +215,12 @@ function TimerSection() {
       minInput.current.value = null
       secInput.current.value = null
       notifySuccess()
+      setTime(0)
     } // else 
-    setTime(0)
   } // handleSaveButton
 
+  // THE THREE FUNCTIONS BELOW ARE USED BY TIME.JS
+  // the function is used by the Time.js file to delete a time from the array.
   function deletePastTime(id) {
     // make a copy of the current pastTimes b/c we don't want to change the current list of past times
     // but instead modify the copy, and set the new state to that copy. We should never modify the state variable.
@@ -199,7 +228,7 @@ function TimerSection() {
     // finding the "time" in the list of past times that has the matching id.
     const pastTime = newTimes.find(time => time.id === id)
 
-    console.log(pastTime)
+    console.log("deletePastTime in TimerSection.js: " + pastTime)
     const index = newTimes.indexOf(pastTime) // find index of the time in the past times list
     // The splice() method takes 2 args, the index of the element you wish to remove and the number of elements to remove.
     newTimes.splice(index, 1);
@@ -238,9 +267,9 @@ function TimerSection() {
         <ul className="timedSection">
             {/* <!-- This will hold the topic that we want to time  --> */}
             <li className="nav-item"><input id="topicInput" type="text" placeholder="Task" autoComplete="off" ref={timeNameRef}></input></li>
-            <li className="nav-item"><input ref={hourInput} onChange={handleHour} type="number" placeholder="hour"></input></li>
-            <li className="nav-item"><input ref={minInput} onChange={handleMinute} type="number" placeholder="minute"></input></li>
-            <li className="nav-item"><input ref={secInput} onChange={handleSecond} type="number" placeholder="second"></input></li>
+            <li className="nav-item"><input ref={hourInput} onChange={handleHour} type="number" placeholder="hour (0-23)"></input></li>
+            <li className="nav-item"><input ref={minInput} onChange={handleHour} type="number" placeholder="minute (0-59)"></input></li>
+            <li className="nav-item"><input ref={secInput} onChange={handleHour} type="number" placeholder="second (0-59)"></input></li>
             <li className="nav-item"><button type="button" onClick={handleSaveButton} id="save">save</button></li>
         </ul>
         <ul className="timedSection">
@@ -248,7 +277,7 @@ function TimerSection() {
             <div>
               {/* Keeping track of hours, minutes, seconds, hundredths of a second */}
 
-              <span>{("0" + Math.floor((timeValue / 3600000) % 60)).slice(-2)}:</span>
+              <span>{("0" + Math.floor((timeValue / 3600000) % 24)).slice(-2)}:</span>
               {/* 60000 milli-seconds b/c there's 60 seconds in a minute */}
               <span>{("0" + Math.floor((timeValue / 60000) % 60)).slice(-2)}:</span>
               {/* 1000 millisecond = second & modulus 60 because 60 seconds in a minute*/}
