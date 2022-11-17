@@ -3,8 +3,10 @@ import './TodoStyle.css';
 
 
 const AddModal = props => {
+
+    const rand = Math.random().toString();
     const newTask = {
-        id: Math.random().toString(),
+        id: rand,
         text: "",
         status: "",
         start: "",
@@ -12,6 +14,7 @@ const AddModal = props => {
         priority: ""
     };
 
+    console.log(newTask.id);
     const onCancel = () => {
         props.onCancel();
     }
@@ -20,6 +23,7 @@ const AddModal = props => {
         if(newTask.priority === ''|| newTask.start === '' || newTask.text === ''){
             throw new Error("Fill out all fields");
         }
+        console.log(newTask);
         props.onConfirm(newTask);
     }
 

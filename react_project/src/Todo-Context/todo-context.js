@@ -5,6 +5,7 @@ const TodoContext = createContext({
     todoCount: 0,
     addTodo:(todo)=> {},
     delTodo:(id) => {},
+    editTodo:(todo) => {}
 });
 
 export function TodosContextProvider(props) {
@@ -22,11 +23,29 @@ export function TodosContextProvider(props) {
         });
     }
 
+    function editTaskHandler(todo){
+        
+        setUserTodos(prevState => {
+            const newTodo =prevState.map(obj => {
+                if(obj.id === todo.id){
+                    return {...obj, status:todo.status,
+                                text:todo.text,
+                                start:todo.start,
+                                end:todo.end,
+                                priority:todo.priority};
+                }
+                return obj;
+            });
+            return newTodo;
+        })
+    }
+
     const context = {
         todos: userTodos,
         todoCount: userTodos.length,
         addTodo:addTaskHandler,
         delTodo:deleteTaskHandler,
+        editTodo:editTaskHandler
     };
 
     return <TodoContext.Provider value={context}>

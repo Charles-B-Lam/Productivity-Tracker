@@ -15,11 +15,11 @@ export const SidebarData = [
         path: "/tasklist",
         icon: <MdAddTask/>
     },
-    {
-        title: "Calendar",
-        path: "/calendar",
-        icon: <FcCalendar/>
-    },
+    // {
+    //     title: "Calendar",
+    //     path: "/calendar",
+    //     icon: <FcCalendar/>
+    // },
     {
         title: "Timer",
         path: "/timer",
