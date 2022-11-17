@@ -1,6 +1,6 @@
 import React from 'react'
-import './TodoStyle.css';
-import TodoTask from './TodoTask';
+import '../Style/TodoStyle.css';
+import TodoTask from '../TodoItem/TodoTask';
 
 const TodoList = props => {
 

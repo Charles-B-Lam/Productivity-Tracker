@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react'
-import './TodoStyle.css';
-import DeleteModal from './DeleteModal';
-import BackDrop from './BackDrop';
-import TodosContext from '../Todo-Context/todo-context.js'
-import EditModal from './EditModal';
+import '../Style/TodoStyle.css';
+import DeleteModal from '../modals/DeleteModal';
+import BackDrop from '../modals/BackDrop';
+import TodosContext from '../Todo-Context/todo-context'
+import EditModal from '../modals/EditModal';
 
 const TodoTask = props => {
 

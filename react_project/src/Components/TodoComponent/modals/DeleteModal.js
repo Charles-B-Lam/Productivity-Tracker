@@ -1,5 +1,5 @@
 import React from 'react'
-import './TodoStyle.css';
+import '../Style/TodoStyle.css';
 
 const DeleteModal = props => {
 
