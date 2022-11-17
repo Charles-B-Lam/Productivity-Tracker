@@ -1,11 +1,18 @@
 import React from 'react'
 import { useContext, useState } from 'react'
-import TodoHeader from './TodoHeader'
-import TodoList from './TodoList'
-import BackDrop from './BackDrop';
-import TodosContext from '../Todo-Context/todo-context.js'
-import AddModal from './AddModal';
-import todoPic from './todo-pic.png'
+// import TodoHeader from './TodoHeader'
+// import TodoList from './TodoList'
+// import BackDrop from './BackDrop';
+// import TodosContext from '../Todo-Context/todo-context.js'
+// import AddModal from './AddModal';
+// import todoPic from './todo-pic.png'
+
+import TodoHeader from './TodoItem/TodoHeader';
+import TodoList from './TodoList/TodoList';
+import BackDrop from './modals/BackDrop';
+import TodosContext from './Todo-Context/todo-context'
+import AddModal from './modals/AddModal'
+import todoPic from './Style/todo-pic.png'
 
 const TodoComponent = () => {
     

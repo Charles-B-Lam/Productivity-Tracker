@@ -2,8 +2,8 @@ import React from 'react'
 import {Routes, Route} from "react-router-dom"
 import Calendar from './Calendar';
 import Home from './Home/Home';
-import TodoComponent from '../../todo/TodoComponent';
-import { TodosContextProvider } from '../../Todo-Context/todo-context';
+import TodoComponent from '../TodoComponent/TodoComponent';
+import { TodosContextProvider } from '../TodoComponent/Todo-Context/todo-context';
 import TimerFeature from '../TimerComponent/TimerFeature/TimerFeature';
 
 
