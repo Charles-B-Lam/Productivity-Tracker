@@ -3,27 +3,39 @@ import './TodoStyle.css';
 import DeleteModal from './DeleteModal';
 import BackDrop from './BackDrop';
 import TodosContext from '../Todo-Context/todo-context.js'
-
+import EditModal from './EditModal';
 
 const TodoTask = props => {
 
     const todoList = useContext(TodosContext);
+    console.log(todoList);
 
-    const [modalOpen, setModalOpen] = useState(false);
+    const [delModalOpen, setDelModalOpen] = useState(false);
+    const [editModalOpen, setEditModalOpen] = useState(false);
 
     const taskId = props.id;
 
     const deleteHandler = () => {
-        setModalOpen(true);
+        setDelModalOpen(true);
+    }
+
+    const editHandler = () => {
+        setEditModalOpen(true);
     }
 
     const closeModal = props => {
-        setModalOpen(false);
+        setEditModalOpen(false);
+        setDelModalOpen(false);
     }
 
     const confirmDelete = props => { 
         todoList.delTodo(taskId);
-        setModalOpen(false);
+        setDelModalOpen(false);
+    }
+
+    const confirmEdit = props => {
+        todoList.editTodo(props);
+        setEditModalOpen(false);
     }
 
   return (
@@ -43,11 +55,16 @@ const TodoTask = props => {
                         <div className='grid-item-tasks' >{props.start}</div>
                         <div className='grid-item-tasks' >{props.end}</div>
                         <div className='grid-item-tasks' >{props.priority}</div>
-                        <div className='grid-item-delete' > 
+                        <div className='grid-item-tasks-delete'>
+                            <button type="button" class="edit-button" onClick={editHandler}>edit</button>
+                        </div>
+                        { editModalOpen && <EditModal onCancel={closeModal} onConfirmEdit={confirmEdit} todoInfo={props}/>}
+                        { editModalOpen && <BackDrop onCancel={closeModal}/> }
+                        <div className='grid-item-tasks-delete' > 
                             <button type="button" class="delete-btn" onClick={deleteHandler}>x</button>
                         </div>
-                        { modalOpen && <DeleteModal onCancel={closeModal} onConfirm={confirmDelete} />}
-                        { modalOpen && <BackDrop onCancel={closeModal}/> }
+                        { delModalOpen && <DeleteModal onCancel={closeModal} onConfirm={confirmDelete} />}
+                        { delModalOpen && <BackDrop onCancel={closeModal}/> }
                 </div>
     </div>
   );
