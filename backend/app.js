@@ -1,6 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+
+// use mongoose to interact with data in the db
 const mongoose = require('mongoose');
+
+// including the models 
 const Task = require("./models/task")
 const Time = require("./models/time")
 
