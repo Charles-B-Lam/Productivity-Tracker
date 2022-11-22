@@ -37,7 +37,7 @@ const getTodoById = (req, res, next) => {
       priority
     };
   
-    DUMMY_TODOS.push(createdTodo); 
+    DUMMY_TODOS.push( createdTodo ); 
   
     res.status(201).json({ todo: createdTodo });
   };
