@@ -26,14 +26,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 /*
-
-
-const todosRoutes = require('./routes/todos-routes');
 const HttpError = require('./models/http-error');
-======= */
+*/
 
 const mongoose = require('mongoose');
 const Task = require("./models/task")
+const todosRoutes = require('./routes/todos-routes');
 const Time = require("./models/time")
 
 const app = express();
@@ -44,6 +42,9 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   // .then((result) => console.log("connected to the db")) // returns a promise so we can use the "then" method to run the callback function (makes sure we are connected to the database)
   .then(result => app.listen(3000)) // listen to port 3000 and returns us an instance of the server (line 12).
   .catch(err => console.log(err));
+
+
+app.use('/api/todos', todosRoutes); 
 
 /* 
 
@@ -82,11 +83,11 @@ app.get('/add-task', (req, res) => {
   // using the model to create a new instance of a task document within the code.
   const task = new Task({
     // in here we pass an object with the different properties of this task
-    status: "good",
+    status: "In progress",
     text: "Task (blah)",
-    start: "November 21",
-    end: "November 22",
-    priority: "high",
+    start: "11/05/2022",
+    end: "11/10/2022",
+    priority: "High",
   }); // we can use a method on this to save it to the database
 
   // when we save it, we use an instance method on the instance of the singular time we created.
