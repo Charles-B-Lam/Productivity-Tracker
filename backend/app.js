@@ -22,6 +22,9 @@
 //     throw error;
 //   });
 
+// dot env is a package that loads environment var's from the .env package into the process.env object
+// available to us globally in a node.js environment
+require('dotenv').config() 
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -37,11 +40,11 @@ const Time = require("./models/time")
 
 const app = express();
 
-// connect to mongodb
+// CONNECT to mongodb
 const dbURI = "mongodb+srv://charles:uga2023@react4300project.ky24uzv.mongodb.net/To-Do-List?retryWrites=true&w=majority"
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   // .then((result) => console.log("connected to the db")) // returns a promise so we can use the "then" method to run the callback function (makes sure we are connected to the database)
-  .then(result => app.listen(3000)) // listen to port 3000 and returns us an instance of the server (line 12).
+  .then(result => app.listen(process.env.PORT)) // listen to port 3000 and returns us an instance of the server (line 12).
   .catch(err => console.log(err));
 
 /* 
@@ -63,12 +66,17 @@ app.use((error, req, res, next) => {
 
 app.listen(5050);*/
 
+// middleware (any code that executes between us getting a request from server & us sending a response)
+app.use((req, res, next) => { // this is global middleware
+  console.log(req.path, req.method)
+  next()
+})
 
 // first arg is what path or url you want to listen to
 // second arg is the callback function that accepts a req (information about url, get, post method) and res (used to send a response)
 app.get('/', (req, res) => { 
   // infers the type of content that we are trying to send to the browser and it automatically sets the content-type header
-  res.send('<p>Hello Hompage using express</p>'); // similar to res.write & res.end. Also infers the status code.
+  res.json({mssg: 'Hello Hompage using express'}); // similar to res.write & res.end. Also infers the status code.
 })
 
 
