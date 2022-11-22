@@ -1,5 +1,37 @@
+// const express = require('express');
+// const bodyParser = require('body-parser');
+// const mongoose = require('mongoose');
+
+// const app = express();
+
+// app.use(bodyParser.json());
+
+// app.use((req, res, next) => {
+//   res.setHeader('Access-Control-Allow-Origin', '*');
+//   res.setHeader(
+//     'Access-Control-Allow-Headers',
+//     'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+//   );
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+
+//   next();
+// });
+
+// app.use((req, res, next) => {
+//     const error = new HttpError('Could not find this route.', 404);
+//     throw error;
+//   });
+
 const express = require('express');
 const bodyParser = require('body-parser');
+
+/*
+
+
+const todosRoutes = require('./routes/todos-routes');
+const HttpError = require('./models/http-error');
+======= */
+
 const mongoose = require('mongoose');
 const Task = require("./models/task")
 const Time = require("./models/time")
@@ -12,6 +44,26 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
   // .then((result) => console.log("connected to the db")) // returns a promise so we can use the "then" method to run the callback function (makes sure we are connected to the database)
   .then(result => app.listen(3000)) // listen to port 3000 and returns us an instance of the server (line 12).
   .catch(err => console.log(err));
+
+/* 
+
+app.use('/api/todos', todosRoutes); // => /api/places...
+
+app.use((req, res, next) => {
+  const error = new HttpError('Could not find this route.', 404);
+  throw error;
+});
+
+app.use((error, req, res, next) => {
+  if (res.headerSent) {
+    return next(error);
+  }
+  res.status(error.code || 500)
+  res.json({message: error.message || 'An unknown error occurred!'});
+});
+
+app.listen(5050);*/
+
 
 // first arg is what path or url you want to listen to
 // second arg is the callback function that accepts a req (information about url, get, post method) and res (used to send a response)
