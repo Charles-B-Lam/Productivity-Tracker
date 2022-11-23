@@ -4,6 +4,8 @@ const todosControllers = require('../controllers/todos-controllers');
 
 const router = express.Router();
 
+router.get('/', todosControllers.getAllTodosById);
+
 router.get('/:pid', todosControllers.getTodoById);
 
 router.post('/', todosControllers.createTodo);

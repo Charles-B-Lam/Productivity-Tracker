@@ -6,11 +6,10 @@ const Todo = require('../models/task');
   /*
     get todo api call
   */
-  const getTodoById = async (req, res, next) => {
-    const todoId = req.params.pid; 
+  const getAllTodosById = async (req, res, next) => {
     let todo;
     try {
-      todo = await Todo.findById(todoId);
+      todo = await Todo.find({}).sort({createdAt: -1});
     } catch (err) {
       const error = new HttpError(
         'Something went wrong, could not find a place.',
@@ -27,8 +26,33 @@ const Todo = require('../models/task');
       return next(error);
     }
   
-    res.json({ todo: todo.toObject({ getters: true }) }); // => { place } => { place: place }
+    res.status(200).json(todo);
   };
+
+  const getTodoById = async (req, res, next) => {
+    const todoId = req.params.pid; 
+    let todo;
+    try {
+      todo = await Todo.find(todoId);
+    } catch (err) {
+      const error = new HttpError(
+        'Something went wrong, could not find a place.',
+        500
+      );
+      return next(error);
+    }
+  
+    if (!todo) {
+      const error = new HttpError(
+        'Could not find a place for the provided id.',
+        404
+      );
+      return next(error);
+    }
+  
+    res.json({ todo: todo.toObject({ getters: true }) });
+  };
+
 
   /*
     update todo api call
@@ -137,6 +161,7 @@ const Todo = require('../models/task');
   };
 
   // export all api calls
+  exports.getAllTodosById = getAllTodosById;
   exports.getTodoById = getTodoById;
   exports.createTodo = createTodo;
   exports.updateTodo = updateTodo;

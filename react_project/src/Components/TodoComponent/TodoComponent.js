@@ -1,18 +1,12 @@
 import React from 'react'
 import { useContext, useState } from 'react'
-// import TodoHeader from './TodoHeader'
-// import TodoList from './TodoList'
-// import BackDrop from './BackDrop';
-// import TodosContext from '../Todo-Context/todo-context.js'
-// import AddModal from './AddModal';
-// import todoPic from './todo-pic.png'
-
 import TodoHeader from './TodoItem/TodoHeader';
 import TodoList from './TodoList/TodoList';
 import BackDrop from './modals/BackDrop';
 import TodosContext from './Todo-Context/todo-context'
 import AddModal from './modals/AddModal'
 import todoPic from './Style/todo-pic.png'
+import Todo from './Todo.js'
 
 const TodoComponent = () => {
     
@@ -41,7 +35,8 @@ const TodoComponent = () => {
                 </div>
                 { modalOpen && <AddModal onCancel={closeModal} onConfirm={confirmAdd}/>}
                 { modalOpen && <BackDrop onCancel={closeModal}/> }
-                <TodoList todos={todoList.todos}/>
+                <Todo />
+                {/* <TodoList todos={todoList.todos}/> */}
                 <img src={todoPic} alt='clipboard' width="200px" height="225px" ></img>
             </div>
     );
