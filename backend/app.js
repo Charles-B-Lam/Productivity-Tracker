@@ -38,19 +38,24 @@ const mongoose = require('mongoose');
 // including the models 
 const Task = require("./models/task")
 const todosRoutes = require('./routes/todos-routes');
+const timesRoutes = require('./routes/times-routes');
 const Time = require("./models/time")
 
 const app = express();
 
 // CONNECT to mongodb
-const dbURI = "mongodb+srv://charles:uga2023@react4300project.ky24uzv.mongodb.net/To-Do-List?retryWrites=true&w=majority"
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   // .then((result) => console.log("connected to the db")) // returns a promise so we can use the "then" method to run the callback function (makes sure we are connected to the database)
   .then(result => app.listen(process.env.PORT)) // listen to port 3000 and returns us an instance of the server (line 12).
   .catch(err => console.log(err));
 
+// middleware
+app.use(express.json()); // specify it before your routes!!! (critical step)
 
+// routes
+// attach this to url http://localhost:4000/ in order to use the API
 app.use('/api/todos', todosRoutes); 
+app.use('/api/times', timesRoutes)
 
 /* 
 
@@ -71,11 +76,18 @@ app.use((error, req, res, next) => {
 
 app.listen(5050);*/
 
-// middleware (any code that executes between us getting a request from server & us sending a response)
-app.use((req, res, next) => { // this is global middleware
-  console.log(req.path, req.method)
-  next()
-})
+// middleware 
+// (any code that executes between us getting a request from server & us sending a response)
+// app.use((req, res, next) => { // this is global middleware
+//   console.log(req.path, req.method)
+//   next()
+// })
+
+// when handling a post or patch request where we're sending data to the server
+// because if we want to add a new time/todo item to the database we have to 
+// send the data for that time/todo document. We can access that from the request 
+// object only if we use a bit of middleware
+
 
 // first arg is what path or url you want to listen to
 // second arg is the callback function that accepts a req (information about url, get, post method) and res (used to send a response)

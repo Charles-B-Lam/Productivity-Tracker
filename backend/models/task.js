@@ -8,23 +8,23 @@ const taskSchema = new Schema({ // creates new instance of a schema object
     // the different properties that a time object might have
     status: {
         type: String,
-        requred: true // this field is required for time documents
+        required: true // this field is required for time documents
     },
     text: {
         type: String,
-        requred: true // this field is required for time documents
+        required: true // this field is required for time documents
     }, 
     start: {
         type: String,
-        requred: true // this field is required for time documents
+        required: true // this field is required for time documents
     }, 
     end: {
         type: String,
-        requred: true // this field is required for time documents
+        required: true // this field is required for time documents
     }, 
     priority: {
         type: String,
-        requred: true // this field is required for time documents
+        required: true // this field is required for time documents
     }  
 }, {timestamps: true}); // second arg = options object
 // automatically generates time stamp properties for us on our blog documents 

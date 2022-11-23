@@ -8,11 +8,11 @@ const timeSchema = new Schema({ // creates new instance of a schema object
     // the different properties that a blog object might have
     title: {
         type: String,
-        requred: true // this field is required for blog documents
+        required: true // this field is required for blog documents
     },     
     time: {
         type: Number,
-        requred: true // this field is required for blog documents
+        required: true // this field is required for blog documents
     }
 }, {timestamps: true}); // second arg = options object
 // automatically generates time stamp properties for us on our blog documents 
@@ -29,7 +29,7 @@ const timeSchema = new Schema({ // creates new instance of a schema object
 // look for that collection inside the database whenever we use this model 
 // in the future to communicate with the database
 // 2nd arg = the schema that we want to base this model on
-const Time = mongoose.model('Time', timeSchema) // it will look for 'Blogs' collection based on this name
+const Time = mongoose.model('Time', timeSchema) // it will look for 'Times' collection based on this name
 
 // export this model so we can use it elsewhere.
 module.exports = Time;
