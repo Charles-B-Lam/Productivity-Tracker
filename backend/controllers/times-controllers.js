@@ -1,28 +1,6 @@
-const HttpError = require('../models/http-error');
-const { validationResult } = require('express-validator');
 const Time = require('../models/time');
 const mongoose = require('mongoose')
 
-let DUMMY_TIMES = [
-{
-
-}
-];
-
-// const getTodoById = (req, res, next) => {
-//     const todoId = req.params.pid; // { pid: 'p1' }
-  
-//     const todo = DUMMY_TODOS.find(p => {
-//       return p.id === todoId;
-//     });
-  
-//     if (!todo) {
-//       throw new HttpError('Could not find a todo for the provided id.', 404);
-//     }
-  
-//     res.json({ todo }); 
-//   };
-    
 const getAllTimes = async (req, res, next) => {
     // res.json({mssg: 'GET all times'}); // testing if request executed
     // finds all the gets us all the documents inside the times collection
