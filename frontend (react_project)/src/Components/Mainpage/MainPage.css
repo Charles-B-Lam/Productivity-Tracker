@@ -10,13 +10,16 @@ body {
 
 .sidebar-section{
     background-color: black;
-    height: 100vh;
+    width: auto;
+    height: auto;
 }
-
 
 .content-section{
     background-color:rgb(217, 249, 249);
-    height: 100vh;
+    /* width: 100vh; */
+    min-height: 100vh;
+    height: auto;
+    width: auto;
 }
 
 

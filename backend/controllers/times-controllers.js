@@ -5,7 +5,7 @@ const getAllTimes = async (req, res, next) => {
     // res.json({mssg: 'GET all times'}); // testing if request executed
     // finds all the gets us all the documents inside the times collection
     const times = await Time.find({}).sort({createdAt: -1}) 
-    res.status(200).json(times)
+    res.status(200).json(times) // the response is the array of time objects
 };
 
 const getTimeById = async (req, res, next) => {
@@ -17,14 +17,15 @@ const getTimeById = async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({error: "No such Time"})
     }
-
-    const time = await Time.findById(id)
+    
+    // method provided to filter and find the object with the specific id
+    const time = await Time.findById(id) 
 
     if (!time) {
         return res.status(404).json({error: "No Such Time"})
     } // if
 
-    res.status(200).json(time)
+    res.status(200).json(time) // the response is the found time object with the specific id
 };
 
 const createTime = async (req, res, next) => {
@@ -41,7 +42,7 @@ const createTime = async (req, res, next) => {
         // when we create a new document once that's been created the response
         // we get is the new document that was just created along with the id of that document
         const data = await Time.create({title, time}); // this is an async function so we need to declare async for the entire function
-        res.status(200).json(data)
+        res.status(200).json(data) // returning the created object
 
         //await createdTime.save(); // save the new Place in the db; save creates the unique place id
     } catch (error) {

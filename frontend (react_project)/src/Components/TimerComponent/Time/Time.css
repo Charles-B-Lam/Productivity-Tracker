@@ -1,18 +1,21 @@
 .row {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
+    list-style: none;
     background-color: lightgrey;
     border: 2px solid grey;
-    padding: 5px;
-    width: 100%;
-    justify-content: space-around;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
-.time {
+ul li {
+    margin-top: auto;
+    margin-bottom: auto;
     padding-top: 10px;
+    padding-bottom: 10px;
 }
 
-span {
-    padding-top: 10px;
+.text {
+    padding-right: 100px;
 }

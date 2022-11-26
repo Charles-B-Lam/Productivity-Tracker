@@ -1,17 +1,16 @@
 import React, {useState, useEffect} from 'react'
 import { IconButton } from '@mui/material';
-import { BsFillPlayFill, BsFillPauseFill, BsArrowCounterclockwise, BsXCircle } from "react-icons/bs";
-
+import { BsFillPlayFill, BsFillPauseFill, BsArrowCounterclockwise, BsArrowClockwise, BsXCircle } from "react-icons/bs";
+import { useTimesContext } from '../hooks/useTimeContext';
 import "./Time.css"
 
-function Time({time, deletePastTime}) {
+function Time({time}) {
 
-  const [timeValue, setTime] = useState(time.timeValue)
-  const [isStarted, setIsActive] = useState(false);   // controls the color of the button and the stop watch
-
-  function handleDelete(e) {
-    deletePastTime(time.id)
-  }
+  const [timeValue, setTime] = useState(time.time)
+  const [isStarted, setIsActive] = useState(false);
+  const [reverse, setReverse] = useState(false);   
+  const [forward, setForward] = useState(false);
+  const {dispatch} = useTimesContext()
 
   // STARTING THE TIMER
   // the use effect function takes in a function and an array. the use effect function runs when the component is rendered.
@@ -22,17 +21,16 @@ function Time({time, deletePastTime}) {
 
     if(isStarted) {
       // timer on so initialize this interval
-
       // increasing the time every ten milli-seconds
       interval = setInterval(() => { // setInterval accepts the arrow function
 
         // prevTime = arbitrary value that points to what the time var was before
-        setTime(prevTime => prevTime + 10) // setting the time variable using setTime (use state method)
-      }, 10) // do this interval every 10 milli-seconds (hundredth of a second).
-
+        setTime(prevTime => prevTime + 1) // setting the time variable using setTime (use state method)
+      }, 1000) // do this interval every 10 milli-seconds (hundredth of a second).
     } else {
       // timer off
       clearInterval(interval) // stop our timer by clearing the interval that has been set.
+      updatePastTime()
       // console.log(timeValue) // check work
     } // if-else
 
@@ -40,6 +38,84 @@ function Time({time, deletePastTime}) {
     // makes sure to stop the interval when the user leaves the page.
     return () => clearInterval(interval) 
   }, [isStarted])
+
+  // 5 second reverse
+  useEffect(() => {
+    if(reverse) {
+      // timer on so initialize this interval
+      setTime(prevTime => prevTime - 5)
+    } else {
+      console.log("Don't reverse")
+      updatePastTime()
+    }
+    setReverse(false)
+  }, [reverse])
+
+   // 5 second reverse
+   useEffect(() => {
+    if(forward) {
+      // timer on so initialize this interval
+      setTime(prevTime => prevTime + 5)
+    } else {
+      console.log("Don't fast forward")
+      updatePastTime()
+    }
+    setForward(false)
+  }, [forward])
+
+  // THE THREE FUNCTIONS BELOW ARE USED BY TIME.JS
+  // the function is used by the Time.js file to delete a time from the array.
+  const deletePastTime = async () => {
+    // DELETING DATA FROM DB
+    // make a copy of the current pastTimes b/c we don't want to change the current list of past times
+    // but instead modify the copy, and set the new state to that copy. We should never modify the state variable.
+    // const newTimes = [...pastTimes]
+    // finding the "time" in the list of past times that has the matching id.
+    // const pastTime = newTimes.find(time => time.id === id)
+    const response = await fetch('/api/times/' + time._id, {
+      method: 'DELETE',
+    })
+    const json = await response.json()
+    console.log("deletePastTime in Time.js: " + json)
+
+    if (response.ok) {
+      dispatch({type: 'DELETE_TIME', payload: json})
+    } else {
+      setError(json.error)
+    }
+    // const index = newTimes.indexOf(pastTime) // find index of the time in the past times list
+    // The splice() method takes 2 args, the index of the element you wish to remove and the number of elements to remove.
+    // newTimes.splice(index, 1);
+    // setPastTimes(newTimes)
+  }
+
+  const updatePastTime = async () => {
+    // modify the values of the resource properties (PATCH REQUEST)
+    // make a copy of the current pastTimes b/c we don't want to change the current list of past times
+    // but instead modify the copy, and set the new state to that copy. We should never modify the state variable.
+    // const newTimes = [...pastTimes]
+    // finding the "time" in the list of past times that has the matching id.
+    // const pastTime = newTimes.find(time => time.id === id)
+    const updateTime = {time: timeValue}
+    const response = await fetch('/api/times/' + time._id, {
+      method: 'PATCH',
+      body: JSON.stringify(updateTime), // turning the dummyTime from an object to a json string
+      headers: {
+          'Content-Type': 'application/json' // content type is JSON
+      } // headers
+    })
+    const json = await response.json()
+    console.log("updatePastTime in Time.js: " + json)
+
+    if (!response.ok) {
+      setError(json.error)
+    } // if-else
+
+    // const index = newTimes.indexOf(pastTime) // find index of the time in the past times list
+    // The splice() method takes 2 args, the index of the element you wish to remove and the number of elements to remove.
+    // newTimes.splice(index, 1);
+    // setPastTimes(newTimes)
+  }
 
   // the function is used by the Time.js file to update a time in the array.
   function handlePlayButton(e) {
@@ -53,47 +129,56 @@ function Time({time, deletePastTime}) {
 
   function handleReverseFiveSeconds(e) {
     // components re-render themselves when the properties passed is changed or the state variables is changed. 
-    // Remember to not directly modify for example if we were working with a variable that holds an array.
-    // don't directly modify that array inside the variable but instead set a new array copy with the change.
-    setTime(prevTime => prevTime - 5000)
+    setReverse(true)
+  }
+
+  function handleForwardFiveSeconds(e) {
+    // components re-render themselves when the properties passed is changed or the state variables is changed. 
+    setForward(true)
   }
 
   return (
-      <nav className="row">
+      <ul className="row">
         {/* // controls each row in the PastTimesList */}
-          <IconButton color="primary" aria-label="play-button" component="label" onClick={handleDelete}>
-            <BsXCircle />
-          </IconButton>
+          <li>     
+              <IconButton color="primary" aria-label="delete-button" component="label" onClick={deletePastTime}>
+                <BsXCircle />
+              </IconButton>
+          </li>
+          <li>  
+            <div>
+                <span className='text'>{time.title}</span>
+                {/* Keeping track of hours, minutes, seconds */}
+                {/* to show 2 digits concatenate a 0 and splice the number to always be 2 digits */}
+                {/* HOURS */}
+                <span>{("0" + Math.floor((timeValue / 3600) % 24)).slice(-2)}:</span>
+                {/* MINUTES */}
+                <span>{("0" + Math.floor((timeValue / 60) % 60)).slice(-2)}:</span>
+                {/* SECONDS */}
+                <span>{("0" + Math.floor((timeValue / 1) % 60)).slice(-2)}</span> 
+            </div>
+          </li>
 
-          <span><p>{time.name}</p></span>  
-          <div className='time'>
-              {/* Keeping track of hours, minutes, seconds, hundredths of a second */}
+          <li>
+            <div>
+              <IconButton color="primary" aria-label="reverse-button" component="label" onClick={handleReverseFiveSeconds}>
+                <BsArrowCounterclockwise />
+              </IconButton>
 
-              <span>{("0" + Math.floor((timeValue / 3600000) % 60)).slice(-2)}:</span>
-              {/* 60000 milli-seconds b/c there's 60 seconds in a minute */}
-              <span>{("0" + Math.floor((timeValue / 60000) % 60)).slice(-2)}:</span>
-              {/* 1000 millisecond = second & modulus 60 because 60 seconds in a minute*/}
-              <span>{("0" + Math.floor((timeValue / 1000) % 60)).slice(-2)}</span> 
-              {/* divide by 10 to see how many hundredths of a seconds are */}
-              {/* show the moduler 100 b/c every time it reaches 100 then we want it to go down to 0 */}
-              {/* to show 2 digits concatenate a 0 and splice the number to always be 2 digits */}
-              {/* <span>{("0" + ((timeValue / 10) % 100)).slice(-2)}</span> */}
-          </div>
+              <IconButton color="primary" aria-label="pause-button" component="label" onClick={handlePauseButton}>
+                <BsFillPauseFill />
+              </IconButton>
 
-          <div className='buttons'>
-          <IconButton color="primary" aria-label="pause-button" component="label" onClick={handleReverseFiveSeconds}>
-              <BsArrowCounterclockwise />
-            </IconButton>
+              <IconButton color="primary" aria-label="play-button" component="label" onClick={handlePlayButton}>
+                <BsFillPlayFill />
+              </IconButton>
 
-            <IconButton color="primary" aria-label="pause-button" component="label" onClick={handlePauseButton}>
-              <BsFillPauseFill />
-            </IconButton>
-
-            <IconButton color="primary" aria-label="play-button" component="label" onClick={handlePlayButton}>
-              <BsFillPlayFill />
-            </IconButton>
-          </div> 
-      </nav>
+              <IconButton color="primary" aria-label="fast-forward-button" component="label" onClick={handleForwardFiveSeconds}>
+                <BsArrowClockwise />
+              </IconButton>
+            </div> 
+          </li>
+      </ul>
   ) // return
 } // Time
 

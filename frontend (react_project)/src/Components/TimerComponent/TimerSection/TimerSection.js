@@ -1,49 +1,56 @@
 import React, {useState, useRef, useEffect} from 'react';
 
 import './TimerSection.css'
-import PastTimesList from '../PastTimesList/PastTimesList'
+import Time from "../Time/Time"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-const { v4: uuidv4 } = require('uuid');
+import { useTimesContext } from '../hooks/useTimeContext';
 
 function TimerSection() {
 
-  // we are going to have access to the input element that involves the "time name" via tmeNameRef variable
+  // we are going to have access to the input element that involves the "time name" via timeNameRef variable
+  // also have access to other input elements that involve number for the time
   const timeNameRef = useRef()
   const hourInput = useRef()
   const minInput = useRef()
   const secInput = useRef()
 
-  // const LOCAL_STORAGE_KEY = 'timeFeature.times'
-
   const [timeValue, setTime] = useState(0)
   // This is the past times list. That should create a new instance of a past time 
-  const[pastTimes, setPastTimes] = useState([]) 
   const[buttonName, setButtonText] = useState("Start") // default set to "Start" text for the button
   const [isStarted, setIsActive] = useState(false);   // controls the color of the button and the stop watch
   const[warningMsg, setWarningText] = useState("") // default set to "Start" text for the button
+  const [error, setError] = useState('')
 
-  // // LOADING
-  // // call this once our right when our component loads
-  // // pass in an empty array of dependencies in order to call this funciton only once b/c empty array never changes
-  // useEffect(() => {
-  //   // getting the storedTimes from local storage.
-  //   const storedTimes = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) // parsing the JSON string
+// we are going to use useTimesContext hook to consume our times context
+// const [times, setTimes] = useState(null) // so don't need this anymore
+  const {times, dispatch} = useTimesContext() // times is null to being with since that is the original state in useReducer function. But once we fetch all the times , we want to update that.
 
-  //   // set our Past Times only if we have any past times stored
-  //   // set storedTimes to the previous Times.
-  //   if (storedTimes) setPastTimes(prevTimes => [...prevTimes, ...storedTimes])
-  // }, [])
+  // LOADING DATA FROM DATABASE
+  // call this once right when our component loads
+  // pass in an empty array of dependencies in order to call this funciton only once b/c empty array never changes
+  // fires a callback funciton when the component is rendered. Only done once. (THIS MIGHT CHANGE HOWEVER WHEN WE ADD NEW TIMES TO THE LIST FOR A USER)
+  useEffect(() => {
+    // getting the storedTimes from database.
+    const fetchTimes = async () => {
+      // added a proxy field within package.json file to allow different server ports to interact with each other (frontend = 3000 & backend = 4000)
+      const response = await fetch('/api/times')
+      const json = await response.json()
 
-  // // SAVING
-  // // store the times in local storage so we use this hook to do so.
-  // // So everytime a time is added to a list, it is saved.
-  // // useEffect takes in another function that helps us save the "pastTimes" everytime it is changed.
-  // useEffect(() => {
-  //   // we pass the key and the JSON string of our pastTimes
-  //   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(pastTimes))
-  // }, [pastTimes]) // the function call occurs everytime pastTimes is modified
+      // checking if the response if ok
+      if (response.ok) {
+        //setTimes(json) // passing in the json (array of times)
 
+        // dispatch is used to update state object.
+        // Pass in an object as arg and the object should have a type property which is a string in all caps that describes in words the state change that we want to make.
+        // Second property is the payload property which represents any data we need to make this change. In this case it would be an array of times objects.
+        // When we call this dispatch function, in turn our timesReducer function is invoked
+        // and it passes the action into the reducer function so it can do its thing and update the state using the info and data.
+        dispatch({type: 'SET_TIMES', payload: json}) // payload is the full array of times we get back from the server
+      } // if
+    } // fetch times
+    fetchTimes()
+  }, [])
 
   // STARTING THE TIMER
   // the use effect function takes in a function and an array. the use effect function runs when the component is rendered.
@@ -51,45 +58,34 @@ function TimerSection() {
   // when setIsActive is changed that is when this function is executed.
   useEffect(() => {
     let interval = null // use this interval to control starting the acutal time
-
     if(isStarted) {
       // timer on so initialize this interval
-
-      // increasing the time every ten milli-seconds
       interval = setInterval(() => { // setInterval accepts the arrow function
-
         // prevTime = arbitrary value that points to what the time var was before
-        setTime(prevTime => prevTime + 10) // setting the time variable using setTime (use state method)
-      }, 10) // do this interval every 10 milli-seconds (hundredth of a second).
-
+        setTime(prevTime => prevTime + 1) // setting the time variable using setTime (use state method)
+      }, 1000) // increasing the time every second and do this interval every 1 second.
     } else {
       // timer off
       clearInterval(interval) // stop our timer by clearing the interval that has been set.
       // console.log(timeValue) // check work
     } // if-else
-
     // cleanup function that helps avoid memory leak when the component get unmounted
     // makes sure to stop the interval when the user leaves the page.
     return () => clearInterval(interval) 
   }, [isStarted])
 
-  // SAVE BUTTON
-  // useEffect(() => {
-  //   setTime(calculatedTime)
-  // }, [calculatedTime])
-
+  // reset time to 0, timer is no longer active, reset button to show start
   function handleResetButton(e) {
     setTime(0);
-    // returns the opposite boolean value that control the red/green color on the button
-    // setIsActive uses lambda expression that accepts curret as parameter and returns opposite of current
     setIsActive(false); 
     setButtonText("Start");
   } // handleStartButton
   
-  function handleStartButton(e) {
-    const timeName = timeNameRef.current.value
+  const handleStartButton = async (e) => {
+    e.preventDefault()
+    const timeName = timeNameRef.current.value // get name of task
 
-    // warning message
+    // warning message for blank name
     if (timeName === '') {
       setWarningText("Must name the task!")
       notifyWarning()
@@ -109,20 +105,42 @@ function TimerSection() {
 
     // doesn't compute until the button is pressed
     if (isStarted) {
-      // console.log("save to the list") // check
-          // is a function call that gives us the prevTimes which we are going to add too.
-      setPastTimes(prevTimes => {
-        // our new timeslist is going to be equal to (...prevTimes in the array + a new time) to that list
-        return [...prevTimes, {id: uuidv4(), name: timeName, timeValue: timeValue}]
-      })
-      
-      console.log("In handleStartButton" + timeValue)
-      // reset the ":time input name" everytime the button is pressed
-      timeNameRef.current.value = null
-      notifySuccess()
+
+      // POSTING DATA TO DATABASE
+      // create dummy time object that we are going to send as the body of the request
+      const dummyTime = {title: timeName, time: timeValue}
+      // console.log("Dummy Time" + dummyTime)
+      // second arg is an object with some options
+      const response = await fetch('/api/times', {
+        method: 'POST',
+        body: JSON.stringify(dummyTime), // turning the dummyTime from an object to a json string
+        headers: {
+          'Content-Type': 'application/json' // content type is JSON
+        } // headers
+      }) // fetch
+      const json = await response.json() // getting the response from the server (json message and status code in console)
+      // console.log(response)
+      // console.log(json)
+
+      if(!response.ok) {
+        setError(json.error)
+      } // if
+      if (response.ok) {
+        setError(null)
+        // reset the ":time input name" everytime the button is pressed
+        timeNameRef.current.value = null
+
+        notifySuccess()
+        setTime(0)
+        // dispatch this action here b/c we want to dispatch it when we have successfully added it to the db b/c if we haven't
+        // added it to the db it make no sense to add it to our global application state
+        // payload is just the single time added b/c it is added to the existing state times
+        dispatch({type: 'CREATE_TIMES', payload: json})
+      } // if
     } // if
   } // handleStartButton
 
+  // THESE FUNCTIONS HANDLES WHEN INPUT IS CHANGING IN INPUT BOX. SETS THE TIME VALUE
   function handleHour(e) {
     const hour = hourInput.current.value
 
@@ -138,7 +156,7 @@ function TimerSection() {
       setTime(0)
       return
     } else {
-      let hourInMilliseconds = hour*3600000
+      let hourInMilliseconds = hour*3600
       setTime(hourInMilliseconds)
       handleMinute(hourInMilliseconds)
     }
@@ -157,7 +175,7 @@ function TimerSection() {
       setTime(0)
       return
     } else {
-      let minuteInMilliseconds = minute*60000
+      let minuteInMilliseconds = minute*60
       setTime(hourInMilliseconds + minuteInMilliseconds)
       handleSecond(hourInMilliseconds, minuteInMilliseconds)
     }
@@ -176,64 +194,58 @@ function TimerSection() {
       setTime(0)
       return
     } else {
-      let secondsInMilliseconds = second*1000
+      let secondsInMilliseconds = second*1
       setTime(secondsInMilliseconds + minuteInMilliseconds + hourInMilliseconds)
     }
   }
 
-  function handleSaveButton(e) {
+  const handleSaveButton = async (e) => {
 
-    // WARNING messages
+    e.preventDefault()
+
     // element we are currently referencing that has a value.
     const timeName = timeNameRef.current.value
 
-    // setIsActive2(current => !current);
-
+    // WARNING messages
     if (timeName === '') {
       setWarningText("Must name the task!")
       notifyWarning()
       return // return nothing when there is nothing in input box
     } else {
-      // console.log(hour)
-      // console.log(minute)
-      // console.log(second)
+      // POSTING DATA TO DATABASE
+      // create dummy time object that we are going to send as the body of the request
+      const dummyTime = {title: timeName, time: timeValue}
+      // console.log("Dummy Time" + dummyTime)
+      // second arg is an object with some options
+      const response = await fetch('/api/times', {
+        method: 'POST',
+        body: JSON.stringify(dummyTime), // turning the dummyTime from an object to a json string
+        headers: {
+          'Content-Type': 'application/json' // content type is JSON
+        }
+      }) // fetch
+      const json = await response.json() // getting the response from the server (json message and status code in console)
 
-      // calculatedTime = (hour*3600000) + (minute*60000) + (second*1000)
-      // setTime(calculatedTime)
-      console.log(timeValue)
+      if(!response.ok) {
+        setError(json.error)
+      } // if
+      if (response.ok) {
+        setError(null)
 
-      // is a function call that gives us the prevTimes which we are going to add too.
-      setPastTimes(prevTimes => {
-        // our new timeslist is going to be equal to (...prevTimes in the array + a new time) to that list
-        return [...prevTimes, {id: uuidv4(), name: timeName, timeValue: timeValue}]
-      })
-      
-      // console.log(timeName)
-      // reset the ":time input name" everytime the button is pressed
-      timeNameRef.current.value = null
-      hourInput.current.value = null
-      minInput.current.value = null
-      secInput.current.value = null
-      notifySuccess()
-      setTime(0)
+        // reset the ":time input name" everytime the button is pressed
+        timeNameRef.current.value = null
+        hourInput.current.value = null
+        minInput.current.value = null
+        secInput.current.value = null
+        notifySuccess()
+        setTime(0)
+        // dispatch this action here b/c we want to dispatch it when we have successfully added it to the db b/c if we haven't
+        // added it to the db it make no sense to add it to our global application state
+        // payload is just the single time added b/c it is added to the existing state times
+        dispatch({type: 'CREATE_TIMES', payload: json})
+      } // if
     } // else 
   } // handleSaveButton
-
-  // THE THREE FUNCTIONS BELOW ARE USED BY TIME.JS
-  // the function is used by the Time.js file to delete a time from the array.
-  function deletePastTime(id) {
-    // make a copy of the current pastTimes b/c we don't want to change the current list of past times
-    // but instead modify the copy, and set the new state to that copy. We should never modify the state variable.
-    const newTimes = [...pastTimes]
-    // finding the "time" in the list of past times that has the matching id.
-    const pastTime = newTimes.find(time => time.id === id)
-
-    console.log("deletePastTime in TimerSection.js: " + pastTime)
-    const index = newTimes.indexOf(pastTime) // find index of the time in the past times list
-    // The splice() method takes 2 args, the index of the element you wish to remove and the number of elements to remove.
-    newTimes.splice(index, 1);
-    setPastTimes(newTimes)
-  }
 
   function notifySuccess() {
     toast.success('Time Saved', {
@@ -274,19 +286,16 @@ function TimerSection() {
         </ul>
         <ul className="timedSection">
             
-            <div>
-              {/* Keeping track of hours, minutes, seconds, hundredths of a second */}
-
-              <span>{("0" + Math.floor((timeValue / 3600000) % 24)).slice(-2)}:</span>
-              {/* 60000 milli-seconds b/c there's 60 seconds in a minute */}
-              <span>{("0" + Math.floor((timeValue / 60000) % 60)).slice(-2)}:</span>
-              {/* 1000 millisecond = second & modulus 60 because 60 seconds in a minute*/}
-              <span>{("0" + Math.floor((timeValue / 1000) % 60)).slice(-2)}</span> 
-              {/* divide by 10 to see how many hundredths of a seconds are */}
-              {/* show the moduler 100 b/c every time it reaches 100 then we want it to go down to 0 */}
+            <li className="nav-item">
+              {/* Keeping track of hours, minutes, seconds */}
               {/* to show 2 digits concatenate a 0 and splice the number to always be 2 digits */}
-              {/* <span>{("0" + ((timeValue / 10) % 100)).slice(-2)}</span> */}
-            </div>
+              {/* HOURS */}
+              <span>{("0" + Math.floor((timeValue / 3600) % 24)).slice(-2)}:</span>
+              {/* MINUTES */}
+              <span>{("0" + Math.floor((timeValue / 60) % 60)).slice(-2)}:</span>
+              {/* Seconds*/}
+              <span>{("0" + Math.floor((timeValue / 1) % 60)).slice(-2)}</span> 
+            </li>
 
             <li className="nav-item">
               <button // the stop/start button
@@ -313,10 +322,16 @@ function TimerSection() {
                   {buttonName} 
               </button>
             </li>
-            {/* <li className="nav-item"><button type="button">stop</button></li> */}
         </ul>
       </nav>
-      <PastTimesList pastTimes={pastTimes} deletePastTime={deletePastTime}/>
+      {/* Check to see if the times response is valid before executing code */}
+      {times && times.map((data) => (
+        <Time key={data._id} time={data}/>
+      ))}
+      {/* {times.map((data) => (
+        <Time key={data._id} time={data} deletePastTime={deletePastTime}/>
+      ))} */}
+      {/* <PastTimesList pastTimes={times} deletePastTime={deletePastTime}/> */}
       {/* renders our toast notification and sets a specific style for all notificaitons */}
       <ToastContainer
         position="top-center"
