@@ -3,9 +3,9 @@ import '../Style/TodoStyle.css';
 
 const AddModal = props => {
 
-    const rand = Math.random().toString();
+    // const rand = Math.random().toString();
     const newTask = {
-        id: rand,
+        id: "",
         text: "",
         status: "",
         start: "",

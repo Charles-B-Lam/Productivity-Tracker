@@ -3,6 +3,8 @@ import '../Style/TodoStyle.css';
 
 const DeleteModal = props => {
 
+    console.log(props);
+
     const onCancel = () => {
         props.onCancel();
     }

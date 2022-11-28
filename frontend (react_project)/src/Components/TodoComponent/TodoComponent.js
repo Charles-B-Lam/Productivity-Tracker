@@ -1,12 +1,5 @@
 import React from 'react'
-import { useContext, useState } from 'react'
-// import TodoHeader from './TodoHeader'
-// import TodoList from './TodoList'
-// import BackDrop from './BackDrop';
-// import TodosContext from '../Todo-Context/todo-context.js'
-// import AddModal from './AddModal';
-// import todoPic from './todo-pic.png'
-
+import { useContext, useState, useEffect } from 'react'
 import TodoHeader from './TodoItem/TodoHeader';
 import TodoList from './TodoList/TodoList';
 import BackDrop from './modals/BackDrop';
@@ -18,6 +11,10 @@ const TodoComponent = () => {
     
     const todoList = useContext(TodosContext);
     const [modalOpen, setModalOpen] = useState(false);
+
+    useEffect(() => {
+        todoList.getTodo();
+    }, []);
 
     function todoListHandler(props) {
         setModalOpen(true);
