@@ -12,6 +12,7 @@ const Task = require("./models/task")
 const Time = require("./models/time")
 const todosRoutes = require('./routes/todos-routes');
 const timesRoutes = require('./routes/times-routes');
+const userRoutes = require('./routes/user')
 
 
 const app = express();
@@ -29,6 +30,7 @@ app.use(express.json()); // specify it before your routes!!! (critical step)
 // attach this to url http://localhost:4000/ in order to use the API
 app.use('/api/todos', todosRoutes); 
 app.use('/api/times', timesRoutes)
+app.use('/api/user', userRoutes)
 
 /* 
 

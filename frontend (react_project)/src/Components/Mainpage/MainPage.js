@@ -12,26 +12,15 @@ const MainPage = () => {
         <section>
             <div>
                 <Navbar/>
+                <Navigationbar/>
+                <Navpage/>
+            </div>
+            <div>
+            
             </div>
         </section>
 
-        {/* For the sidebar section */}
-        <section>
-            <div className="grid">
-                {/*This will be the side bar section col-span-3 bg-black h-screen pl-2'*/}
-                <div className="sidebar-section"> <Sidebar/> </div>
-
-                {/* This will be the content section */}
-                {/*This will be when you click on one of the tasklist or calendar
-                in the sidebar, this is the content
-                */}
-                <div className="content-section">
-                    <Navigationbar/>
-                    <Navpage/>
-                </div>
-
-            </div>
-        </section>
+       
 
     </React.Fragment>
 

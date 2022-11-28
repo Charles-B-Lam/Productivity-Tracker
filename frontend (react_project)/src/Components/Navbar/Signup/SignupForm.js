@@ -35,7 +35,7 @@ const SignupForm = ({submitForm}) => {
   /*HandleFormSubmit .preventDefault stop the page from refreshing 
   when you click submit
   */
-  const handleFormSubmit = (event) =>{
+  const handleFormSubmit = async (event) =>{
     event.preventDefault();
     setErrors(validation(values)); //if there error when you click signup button, we show the error
     setDataIsCorrect(true);

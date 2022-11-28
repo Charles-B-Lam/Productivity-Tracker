@@ -1,55 +1,62 @@
-import React, {useState} from 'react'
-import LoginForm from './LoginForm';
-import './login.css'
+import { useState } from "react";
+import { useLogin } from "../../hooks/useLogin";
 
-function Login() {
+const Login = () => {
 
-  //user data. store in data base, but using for testcase 
-  const adminUser = {
-    email: "admin@gmail.com",
-    password: "hello123"
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const {login, error, isLoading} = useLogin()
+
+
+  const handleSubmit = async(e) =>{
+    e.preventDefault()
+
+    await login(email, password)
+
   }
 
-  //where we get the data from user
-  const [user, setUser] = useState({name: "", email: ""});
-  //catch if our detail data is correct
-  const [error, setError] = useState("");
-  
-  const Logon = details => {
-    console.log(details);
-    //if emails and password correct then it logged in
-    if(details.email == adminUser.email && details.password == adminUser.password){
-      //to log in
-      setUser({
-        name: details.name,
-        email: details.email
-      });
-    }else{
-      setError("Details do not match");
-    }
-  }
-
-  //logout once you log back in
-  //setting setuser back to default
-  const Logout = () =>{
-    setUser({name: "", email: ""})
-  }
-
-  
   return (
-    <div className="app">
-      {/*if user enter email or email is not empty anymore, we will render welcome and logout button */}
-      {(user.email != "")?(
-        <div className="welcome"> 
-          <h2>Welcome, <span>{user.name}</span></h2>
-          <button onClick={Logout}>Logout</button>
-        </div>
+    <div className="container">
+            <div className="app-wrapper">
+                <div>
+                    <h2 className="title-signup">Log In</h2>
+                </div>
+                <form className="form-wrapper" onSubmit={handleSubmit}>
+                
+                <div className="email">
+                    {/*Below is text box for user to type it email */}
+                    <label className="label"> Email</label>
+                    <input 
+                    className="input" 
+                    type="email"   
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                    />
+             
+                </div>
 
-      ):(
-        <LoginForm Logon={Logon} error={error}/>
-      )}
-    
-    </div>
+                <div className="password">
+                    {/*Below is text box for user to type it password */}
+                    <label className="label">Password</label>
+                    <input 
+                    className="input" 
+                    type="password" 
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                    />  
+                </div>
+
+                {/*This is the signup button */}
+                <div>
+                    <button className="submit" disabled={isLoading}>
+                      Login
+                    </button>
+                </div>
+                {error && <div className="error">{error}</div>}
+                </form>
+            </div>
+        </div>
   )
 }
 

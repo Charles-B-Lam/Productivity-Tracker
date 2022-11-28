@@ -73,11 +73,14 @@
     margin-bottom: 10px;
 }
 
-.error{
+div.error {
+    padding: 10px;
+    border: 1px solid var(--error);
     color: red;
-    font-size: 15px;
-}
-
+    margin: 50px 140px;
+    font-size: 20px;
+  }
+  
 .submit{
     display: flex;
     font-family: 'Rubik Bubbles', cursive;
@@ -118,9 +121,6 @@ button:active{
         block-size: fit-content;
     }
     
-   
-
-
 }
 
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { SidebarData } from './SidebarData'
+import { SidebarData } from '../Navbar/SidebarData'
 import './Sidebar.css'
 import { NavLink } from 'react-router-dom'
 
