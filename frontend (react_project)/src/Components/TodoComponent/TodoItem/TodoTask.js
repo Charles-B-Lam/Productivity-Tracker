@@ -29,15 +29,22 @@ const TodoTask = props => {
     }
 
     const confirmDelete = props => { 
+
         todoList.delTodo(taskId);
+        useEffect(() => {
+            todoList.getTodo();
+        }, [todoList.todos]);
         setDelModalOpen(false);
     }
 
-    const confirmEdit = props => {
-        console.log(props);
-        todoList.editTodo(props);
-        setEditModalOpen(false);
-    }
+        const confirmEdit = props => {
+            console.log(props);
+            todoList.editTodo(props);
+            useEffect(() => {
+                todoList.getTodo();
+            }, [todoList.editTodo]);
+            setEditModalOpen(false);
+        }
 
   return (
     <div>

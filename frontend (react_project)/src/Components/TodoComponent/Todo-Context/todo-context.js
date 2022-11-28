@@ -36,8 +36,6 @@ export function TodosContextProvider(props) {
       };
 
     async function addTaskHandler(todo){
-        setUserTodos(userTodos.concat(todo))
-
         try {
             const response = await fetch('/api/todos', {
               method: 'POST',
