@@ -5,6 +5,8 @@ import Time from "../Time/Time"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTimesContext } from '../hooks/useTimeContext';
+import { useAuthContext } from '../../hooks/useAuthContext'
+
 
 function TimerSection() {
 
@@ -26,6 +28,8 @@ function TimerSection() {
 // const [times, setTimes] = useState(null) // so don't need this anymore
   const {times, dispatch} = useTimesContext() // times is null to being with since that is the original state in useReducer function. But once we fetch all the times , we want to update that.
 
+  const {user} = useAuthContext()
+
   // LOADING DATA FROM DATABASE
   // call this once right when our component loads
   // pass in an empty array of dependencies in order to call this funciton only once b/c empty array never changes
@@ -34,7 +38,11 @@ function TimerSection() {
     // getting the storedTimes from database.
     const fetchTimes = async () => {
       // added a proxy field within package.json file to allow different server ports to interact with each other (frontend = 3000 & backend = 4000)
-      const response = await fetch('/api/times')
+      const response = await fetch('/api/times', {
+        headers: {
+          'Authorization': `Bearer ${user.token}`
+        }
+      })
       const json = await response.json()
 
       // checking if the response if ok
@@ -47,10 +55,14 @@ function TimerSection() {
         // When we call this dispatch function, in turn our timesReducer function is invoked
         // and it passes the action into the reducer function so it can do its thing and update the state using the info and data.
         dispatch({type: 'SET_TIMES', payload: json}) // payload is the full array of times we get back from the server
+      
+      if(user){
+        fetchTimes()
+      }  
+      
       } // if
     } // fetch times
-    fetchTimes()
-  }, [])
+  }, [user])
 
   // STARTING THE TIMER
   // the use effect function takes in a function and an array. the use effect function runs when the component is rendered.
@@ -83,6 +95,13 @@ function TimerSection() {
   
   const handleStartButton = async (e) => {
     e.preventDefault()
+
+    //if you start the button without being logged in, you get this message
+    //if we do have user, it will send the authorization token
+    if(!user){
+      setError('You must be logged in')
+      return
+    }
     const timeName = timeNameRef.current.value // get name of task
 
     // warning message for blank name
@@ -115,7 +134,8 @@ function TimerSection() {
         method: 'POST',
         body: JSON.stringify(dummyTime), // turning the dummyTime from an object to a json string
         headers: {
-          'Content-Type': 'application/json' // content type is JSON
+          'Content-Type': 'application/json', // content type is JSON
+          'Authorization': `Bearer ${user.token}`
         } // headers
       }) // fetch
       const json = await response.json() // getting the response from the server (json message and status code in console)
@@ -203,9 +223,16 @@ function TimerSection() {
 
     e.preventDefault()
 
+    //if you start the button without being logged in, you get this message
+    //if we do have user, it will send the authorization token
+    if(!user){
+      setError('You must be logged in')
+      return
+    }
+
     // element we are currently referencing that has a value.
     const timeName = timeNameRef.current.value
-
+    
     // WARNING messages
     if (timeName === '') {
       setWarningText("Must name the task!")
@@ -221,7 +248,8 @@ function TimerSection() {
         method: 'POST',
         body: JSON.stringify(dummyTime), // turning the dummyTime from an object to a json string
         headers: {
-          'Content-Type': 'application/json' // content type is JSON
+          'Content-Type': 'application/json', // content type is JSON
+          'Authorization': `Bearer ${user.token}`
         }
       }) // fetch
       const json = await response.json() // getting the response from the server (json message and status code in console)

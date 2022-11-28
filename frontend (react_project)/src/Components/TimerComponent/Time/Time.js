@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { IconButton } from '@mui/material';
 import { BsFillPlayFill, BsFillPauseFill, BsArrowCounterclockwise, BsArrowClockwise, BsXCircle } from "react-icons/bs";
 import { useTimesContext } from '../hooks/useTimeContext';
+import { useAuthContext } from '../../hooks/useAuthContext'
 import "./Time.css"
 
 function Time({time}) {
@@ -11,6 +12,8 @@ function Time({time}) {
   const [reverse, setReverse] = useState(false);   
   const [forward, setForward] = useState(false);
   const {dispatch} = useTimesContext()
+
+  const {user} = useAuthContext()
 
   // STARTING THE TIMER
   // the use effect function takes in a function and an array. the use effect function runs when the component is rendered.
@@ -74,6 +77,9 @@ function Time({time}) {
     // const pastTime = newTimes.find(time => time.id === id)
     const response = await fetch('/api/times/' + time._id, {
       method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${user.token}`
+      }
     })
     const json = await response.json()
     console.log("deletePastTime in Time.js: " + json)
@@ -101,7 +107,8 @@ function Time({time}) {
       method: 'PATCH',
       body: JSON.stringify(updateTime), // turning the dummyTime from an object to a json string
       headers: {
-          'Content-Type': 'application/json' // content type is JSON
+          'Content-Type': 'application/json', // content type is JSON
+          'Authorization': `Bearer ${user.token}`
       } // headers
     })
     const json = await response.json()
