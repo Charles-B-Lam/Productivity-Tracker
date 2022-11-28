@@ -331,7 +331,6 @@ function TimerSection() {
       {/* {times.map((data) => (
         <Time key={data._id} time={data} deletePastTime={deletePastTime}/>
       ))} */}
-      {/* <PastTimesList pastTimes={times} deletePastTime={deletePastTime}/> */}
       {/* renders our toast notification and sets a specific style for all notificaitons */}
       <ToastContainer
         position="top-center"
