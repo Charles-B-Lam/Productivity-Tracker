@@ -88,7 +88,6 @@ export function TodosContextProvider(props) {
     }
 
     async function editTaskHandler(todo){
-
         try {
             const response = await fetch('/api/todos/'+ todo.id, {
               method: 'PATCH',

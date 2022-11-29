@@ -25,7 +25,11 @@ const taskSchema = new Schema({ // creates new instance of a schema object
     priority: {
         type: String,
         required: true // this field is required for time documents
-    }  
+    },
+    user_id: {
+        type: String,
+        required: true
+    } 
 }, {timestamps: true}); // second arg = options object
 // automatically generates time stamp properties for us on our blog documents 
 // as well so like a created and updated a property and 
