@@ -55,13 +55,13 @@ function TimerSection() {
         // When we call this dispatch function, in turn our timesReducer function is invoked
         // and it passes the action into the reducer function so it can do its thing and update the state using the info and data.
         dispatch({type: 'SET_TIMES', payload: json}) // payload is the full array of times we get back from the server
-      
-      if(user){
-        fetchTimes()
-      }  
+       
       
       } // if
     } // fetch times
+    if(user){
+      fetchTimes()
+    } 
   }, [user])
 
   // STARTING THE TIMER
@@ -249,7 +249,7 @@ function TimerSection() {
         body: JSON.stringify(dummyTime), // turning the dummyTime from an object to a json string
         headers: {
           'Content-Type': 'application/json', // content type is JSON
-          'Authorization': `Bearer ${user.token}`
+          "Authorization": `Bearer ${user.token}`
         }
       }) // fetch
       const json = await response.json() // getting the response from the server (json message and status code in console)
