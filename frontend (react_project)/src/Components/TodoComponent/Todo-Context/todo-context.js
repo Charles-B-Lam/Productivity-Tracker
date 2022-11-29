@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react'
+import { useAuthContext } from '../../hooks/useAuthContext'
 
 const TodoContext = createContext({
     todos: [],
@@ -12,14 +13,14 @@ const TodoContext = createContext({
 export function TodosContextProvider(props) {
 
     const [userTodos, setUserTodos] = useState([]);
+    const {user} = useAuthContext();
 
-    // useEffect(() => {
-    //     getTasks();
-    // }, [userTodos]);
     
     async function getTasks () {
         try {
-          const response = await fetch('/api/todos');
+          const response = await fetch('/api/todos', { method: 'GET', 
+          headers: {'Authorization': `Bearer ${user.token}`}
+        });
           console.log("request made");
   
           const responseData = await response.json();
@@ -40,7 +41,8 @@ export function TodosContextProvider(props) {
             const response = await fetch('/api/todos', {
               method: 'POST',
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`
               },
               body: JSON.stringify({
                 text: todo.text,
@@ -67,7 +69,7 @@ export function TodosContextProvider(props) {
         try {
             const response = await fetch('/api/todos/'+ id, {
               method: 'DELETE',
-              headers: {}
+              headers: {'Authorization': `Bearer ${user.token}`}
             });
     
             const responseData = await response.json();
@@ -88,13 +90,14 @@ export function TodosContextProvider(props) {
     async function editTaskHandler(todo){
 
         try {
-            const response = await fetch('/api/todos/'+ todo._id, {
+            const response = await fetch('/api/todos/'+ todo.id, {
               method: 'PATCH',
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`
               },
               body: JSON.stringify({
-                _id: todo._id,
+                id: todo.id,
                 text: todo.text,
                 status: todo.status,
                 start: todo.start,
@@ -111,7 +114,7 @@ export function TodosContextProvider(props) {
             
             setUserTodos(prevState => {
                 const newTodo = prevState.map(obj => {
-                    if(obj.id === todo._id){
+                    if(obj.id === todo.id){
                         return {...obj, status:todo.status,
                                     text:todo.text,
                                     start:todo.start,
@@ -125,7 +128,7 @@ export function TodosContextProvider(props) {
 
           } catch (err) {
             console.log(err);
-            setError(err.message || 'Something went wrong, please try again.');
+            // setError(err.message || 'Something went wrong, please try again.');
           }
           getTasks();
     }
@@ -140,7 +143,7 @@ export function TodosContextProvider(props) {
     };
 
 
-    return <TodoContext.Provider value={ context}>
+    return <TodoContext.Provider value={ context }>
         {props.children}
     </TodoContext.Provider>
 }

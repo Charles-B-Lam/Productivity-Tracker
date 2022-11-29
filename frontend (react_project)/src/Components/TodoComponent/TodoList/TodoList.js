@@ -18,7 +18,7 @@ const TodoList = props => {
         {props.todos.map(task => {
             return(
             <TodoTask 
-            _id={task._id}
+            id={task.id}
             status={task.status}
             text={task.text}
             start={task.start}

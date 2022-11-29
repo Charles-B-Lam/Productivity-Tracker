@@ -13,7 +13,7 @@ const TodoTask = props => {
     const [delModalOpen, setDelModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
 
-    const taskId = props._id;
+    const taskId = props.id;
 
     useEffect(() => {
         todoList.getTodo();
