@@ -21,6 +21,7 @@ function TimerSection() {
   // This is the past times list. That should create a new instance of a past time 
   const[buttonName, setButtonText] = useState("Start") // default set to "Start" text for the button
   const [isStarted, setIsActive] = useState(false);   // controls the color of the button and the stop watch
+  const [isError, setBoolError] = useState(false);   // controls the color of the button and the stop watch
   const[warningMsg, setWarningText] = useState("") // default set to "Start" text for the button
   const [error, setError] = useState('')
 
@@ -86,6 +87,27 @@ function TimerSection() {
     return () => clearInterval(interval) 
   }, [isStarted])
 
+  // DISPLAYS THE ERROR MESSAGE
+  useEffect(() => {
+    if(isError) {
+      // timer on so initialize this interval
+      toast.warn(warningMsg, {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
+      
+    } else {
+      console.log("No Error")
+    }
+    setBoolError(false)
+  }, [isError, warningMsg])
+
   // reset time to 0, timer is no longer active, reset button to show start
   function handleResetButton(e) {
     setTime(0);
@@ -107,7 +129,7 @@ function TimerSection() {
     // warning message for blank name
     if (timeName === '') {
       setWarningText("Must name the task!")
-      notifyWarning()
+      setBoolError(true)
       return // return nothing when there is nothing in input box
     } 
 
@@ -167,12 +189,12 @@ function TimerSection() {
     // if there is already a value for setTime
     if (hour >= 24) {
       setWarningText("Choose an hour less than 24!")
-      notifyWarning()
+      setBoolError(true)
       setTime(0)
       return
     } else if (hour < 0) {
       setWarningText("Choose an hour greater than equal to 0")
-      notifyWarning()
+      setBoolError(true)
       setTime(0)
       return
     } else {
@@ -186,12 +208,12 @@ function TimerSection() {
     const minute = minInput.current.value
     if (minute >= 60) {
       setWarningText("Choose a minute less than 60!")
-      notifyWarning()
+      setBoolError(true)
       setTime(0)
       return
     } else if (minute< 0) {
       setWarningText("Choose a minute greater than equal to 0")
-      notifyWarning()
+      setBoolError(true)
       setTime(0)
       return
     } else {
@@ -205,12 +227,12 @@ function TimerSection() {
     const second = secInput.current.value
     if (second >= 60) {
       setWarningText("Choose a second less than 60!")
-      notifyWarning()
+      setBoolError(true)
       setTime(0)
       return
     } else if (second < 0) {
       setWarningText("Choose a second greater than equal to 0")
-      notifyWarning()
+      setBoolError(true)
       setTime(0)
       return
     } else {
@@ -236,7 +258,7 @@ function TimerSection() {
     // WARNING messages
     if (timeName === '') {
       setWarningText("Must name the task!")
-      notifyWarning()
+      setBoolError(true)
       return // return nothing when there is nothing in input box
     } else {
       // POSTING DATA TO DATABASE
@@ -287,19 +309,6 @@ function TimerSection() {
       theme: "colored",
       });
   };
-
-  function notifyWarning() {
-    toast.warn(warningMsg, {
-      position: "top-center",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-      });
-  }
 
   return (
     <>
