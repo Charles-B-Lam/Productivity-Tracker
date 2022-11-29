@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import '../Style/TodoStyle.css';
 import DeleteModal from '../modals/DeleteModal';
 import BackDrop from '../modals/BackDrop';
@@ -13,7 +13,11 @@ const TodoTask = props => {
     const [delModalOpen, setDelModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
 
-    const taskId = props.id;
+    const taskId = props._id;
+
+    useEffect(() => {
+        todoList.getTodo();
+    }, []);
 
     const deleteHandler = () => {
         setDelModalOpen(true);
@@ -30,13 +34,15 @@ const TodoTask = props => {
 
     const confirmDelete = props => { 
         todoList.delTodo(taskId);
+        todoList.getTodo();
         setDelModalOpen(false);
     }
 
-    const confirmEdit = props => {
-        todoList.editTodo(props);
-        setEditModalOpen(false);
-    }
+        const confirmEdit = props => {
+            console.log(props);
+            todoList.editTodo(props);
+            setEditModalOpen(false);
+        }
 
   return (
     <div>

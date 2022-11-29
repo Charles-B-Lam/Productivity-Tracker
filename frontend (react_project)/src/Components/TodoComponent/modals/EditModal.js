@@ -4,16 +4,16 @@ import '../Style/TodoStyle.css';
 const EditModal = props => {
     const currentTask = {};
 
-    currentTask.id = props.todoInfo.id;
+    currentTask._id = props.todoInfo._id;
     currentTask.text = props.todoInfo.text;
     currentTask.status= props.todoInfo.status;
     currentTask.start= props.todoInfo.start;
     currentTask.end=props.todoInfo.end;
     currentTask.priority= props.todoInfo.priority;
-    console.log(props.todoInfo.id);
+    console.log(props.todoInfo._id);
 
     const newTask = {
-        id: props.todoInfo.id,
+        _id: props.todoInfo._id,
         text: props.todoInfo.text,
         status: props.todoInfo.status,
         start: props.todoInfo.start,

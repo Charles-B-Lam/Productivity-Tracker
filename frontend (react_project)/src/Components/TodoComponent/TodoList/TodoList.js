@@ -11,13 +11,14 @@ const TodoList = props => {
           </div>
         );
       }
+      console.log("adding to list.")
 
   return (
     <div>
         {props.todos.map(task => {
             return(
             <TodoTask 
-            id={task.id}
+            _id={task._id}
             status={task.status}
             text={task.text}
             start={task.start}
