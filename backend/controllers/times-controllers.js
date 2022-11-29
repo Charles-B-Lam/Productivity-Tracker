@@ -2,9 +2,13 @@ const Time = require('../models/time');
 const mongoose = require('mongoose')
 
 const getAllTimes = async (req, res, next) => {
+
+    //only the login user with id it will return the document back to the browser
+    const user_id = req.user._id
+
     // res.json({mssg: 'GET all times'}); // testing if request executed
     // finds all the gets us all the documents inside the times collection
-    const times = await Time.find({}).sort({createdAt: -1}) 
+    const times = await Time.find({user_id}).sort({createdAt: -1}) 
     res.status(200).json(times) // the response is the array of time objects
 };
 
