@@ -38,10 +38,14 @@ const createTime = async (req, res, next) => {
 
     // add doc to db
     try {
+        console.log(req)
+        const user_id = req.user._id
+        console.log(user_id)
+
         // USING TIME MODEL TO CREATE A TIME DOCUMENT(data)
         // when we create a new document once that's been created the response
         // we get is the new document that was just created along with the id of that document
-        const data = await Time.create({title, time}); // this is an async function so we need to declare async for the entire function
+        const data = await Time.create({title, time, user_id}); // this is an async function so we need to declare async for the entire function
         res.status(200).json(data) // returning the created object
 
         //await createdTime.save(); // save the new Place in the db; save creates the unique place id

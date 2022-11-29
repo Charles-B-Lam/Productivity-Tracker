@@ -10,9 +10,9 @@ root.render(
     <React.StrictMode>
         <AuthContextProvider>
             <TimesContextProvider>
-                <TimesContextProvider>
+                <TodosContextProvider>
                     <App />
-                </TimesContextProvider>
+                </TodosContextProvider>
             </TimesContextProvider>
         </AuthContextProvider>
      </React.StrictMode>

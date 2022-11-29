@@ -12,6 +12,10 @@ const timeSchema = new Schema({ // creates new instance of a schema object
     time: {
         type: Number,
         required: true // this field is required for blog documents
+    },
+    user_id: {
+        type: String,
+        required: true
     }
 }, {timestamps: true}); // second arg = options object
 
