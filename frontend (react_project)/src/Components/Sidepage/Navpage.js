@@ -24,7 +24,7 @@ function Navpage() {
               <Route path="/home" element={user ? <Home/> : <Navigate to="/login"/>} />
               <Route path="/tasklist" element={user ? <TodosContextProvider><TodoComponent /></TodosContextProvider> : <Navigate to="/login"/>} />
               {/* <Route path="/timer" element={<TimerFeature />} /> */}
-              <Route path="/timer" element={ <TimesContextProvider> <TimerFeature /> </TimesContextProvider> } />
+              <Route path="/timer" element={ user ? <TimesContextProvider> <TimerFeature /> </TimesContextProvider>: <Navigate to="/login"/> } />
             </Routes>
         </section>
     </React.Fragment>
