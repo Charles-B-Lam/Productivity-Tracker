@@ -63,6 +63,7 @@ export function TodosContextProvider(props) {
             console.log(err);
             console.log(err.message || 'Something went wrong, please try again.');
           }
+          getTasks();
     }
 
     async function deleteTaskHandler(id){

@@ -40,25 +40,25 @@ const TodoTask = props => {
         setEditModalOpen(false);
     }
 
-    const statusHandler = (event) => {
-        event.preventDefault();
-        const newTask = {
-            _id: props._id,
-            text: props.text,
-            status: props.status,
-            start: props.start,
-            end: props.end,
-            priority: props.priority
-        };
-        console.log(props);
+    // const statusHandler = (event) => {
+    //     event.preventDefault();
+    //     const newTask = {
+    //         _id: props._id,
+    //         text: props.text,
+    //         status: props.status,
+    //         start: props.start,
+    //         end: props.end,
+    //         priority: props.priority
+    //     };
+    //     console.log(props);
 
-        const name = event.target.name;
-        const value = event.target.value;
-        if(name === "status"){
-            newTask.status = value;
-            todoList.editTodo(newTask);
-        }
-    }
+    //     const name = event.target.name;
+    //     const value = event.target.value;
+    //     if(name === "status"){
+    //         newTask.status = value;
+    //         todoList.editTodo(newTask);
+    //     }
+    // }
 
   return (
     <div>
@@ -66,13 +66,13 @@ const TodoTask = props => {
                         <div className='grid-item-tasks-title' >
                             {props.text}
                             </div>
-                        <div className='grid-item-tasks-status' >
-                        <select name="status" className='custom-select' onChange={statusHandler}>
+                        <div className='grid-item-tasks' >{props.status}
+                        {/* <select name="status" className='custom-select'>
                             <option value="" selected disabled hidden>{props.status}</option>
                             <option value="Not started">Not started</option>
                             <option value="In progress">In progress</option>
                             <option value="Completed">Completed</option>
-                        </select>
+                        </select> */}
                         </div>
                         <div className='grid-item-tasks' >{props.start}</div>
                         <div className='grid-item-tasks' >{props.end}</div>

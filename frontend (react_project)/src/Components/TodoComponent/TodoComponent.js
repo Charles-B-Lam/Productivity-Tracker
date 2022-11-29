@@ -39,7 +39,7 @@ const TodoComponent = () => {
                 { modalOpen && <AddModal onCancel={closeModal} onConfirm={confirmAdd}/>}
                 { modalOpen && <BackDrop onCancel={closeModal}/> }
                 <TodoList todos={todoList.todos}/>
-                <img src={todoPic} alt='clipboard' width="200px" height="225px" ></img>
+                <img src={todoPic} alt='clipboard' width="240px" height="260px"></img>
             </div>
     );
 }
