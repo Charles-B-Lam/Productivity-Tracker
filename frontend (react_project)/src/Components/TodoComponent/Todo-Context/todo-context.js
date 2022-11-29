@@ -16,7 +16,7 @@ export function TodosContextProvider(props) {
     // useEffect(() => {
     //     getTasks();
     // }, [userTodos]);
-
+    
     async function getTasks () {
         try {
           const response = await fetch('/api/todos');
@@ -82,6 +82,7 @@ export function TodosContextProvider(props) {
         setUserTodos(previousTodos => {
             return previousTodos.filter(todo => todo.id !== id);
         });
+        getTasks();
     }
 
     async function editTaskHandler(todo){
@@ -126,7 +127,7 @@ export function TodosContextProvider(props) {
             console.log(err);
             setError(err.message || 'Something went wrong, please try again.');
           }
-        
+          getTasks();
     }
 
     const context = {
@@ -138,7 +139,8 @@ export function TodosContextProvider(props) {
         editTodo:editTaskHandler
     };
 
-    return <TodoContext.Provider value={context}>
+
+    return <TodoContext.Provider value={ context}>
         {props.children}
     </TodoContext.Provider>
 }
