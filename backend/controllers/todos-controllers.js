@@ -7,9 +7,12 @@ const Todo = require('../models/task');
     get todo api call
   */
   const getAllTodosById = async (req, res, next) => {
+    const user_id = req.user._id;
+        // console.log(user_id)
+
     let todo;
     try {
-      todo = await Todo.find({}).sort({createdAt: -1});
+      todo = await Todo.find({user_id}).sort({createdAt: -1});
     } catch (err) {
       const error = new HttpError(
         'Something went wrong, could not find a place.',
@@ -66,17 +69,19 @@ const Todo = require('../models/task');
     }
   
     const { status, text, start, end, priority } = req.body;
+    const user_id = req.user._id
   
     const createdTodo = new Todo({
           status,
           text,
           start,
           end,
-          priority
+          priority,
+          user_id
         });
   
     try {
-      await createdTodo.save(); // save the new Place in the db; save creates the unique place id
+      await createdTodo.save(); 
     } catch (err) {
       const error = new HttpError(
         'Creating place failed, please try again.',
@@ -99,6 +104,7 @@ const Todo = require('../models/task');
   
     const { status, text, start, end, priority } = req.body;
     const todoId = req.params.pid;
+    console.log(todoId)
   
     let todo;
     try {

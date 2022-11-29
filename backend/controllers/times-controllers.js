@@ -42,9 +42,9 @@ const createTime = async (req, res, next) => {
 
     // add doc to db
     try {
-        console.log(req)
+        // console.log(req)
         const user_id = req.user._id
-        console.log(user_id)
+        // console.log(user_id)
 
         // USING TIME MODEL TO CREATE A TIME DOCUMENT(data)
         // when we create a new document once that's been created the response

@@ -11,9 +11,6 @@ const TodoComponent = () => {
     
     const todoList = useContext(TodosContext);
     const [modalOpen, setModalOpen] = useState(false);
-    // const [todos, setTodos] = useState([]);
-    // setTodos(todoList);
-    // console.log(todos);
 
     useEffect(() => {
         todoList.getTodo();

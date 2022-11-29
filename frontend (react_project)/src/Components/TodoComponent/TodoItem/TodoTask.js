@@ -13,11 +13,8 @@ const TodoTask = props => {
     const [delModalOpen, setDelModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
 
-    const taskId = props.id;
-
-    useEffect(() => {
-        todoList.getTodo();
-    }, []);
+    const taskId = props._id;
+    console.log(taskId);
 
     const deleteHandler = () => {
         setDelModalOpen(true);
@@ -34,15 +31,34 @@ const TodoTask = props => {
 
     const confirmDelete = props => { 
         todoList.delTodo(taskId);
-        todoList.getTodo();
         setDelModalOpen(false);
     }
 
-        const confirmEdit = props => {
-            console.log(props);
-            todoList.editTodo(props);
-            setEditModalOpen(false);
+    const confirmEdit = props => {
+        console.log(props);
+        todoList.editTodo(props);
+        setEditModalOpen(false);
+    }
+
+    const statusHandler = (event) => {
+        event.preventDefault();
+        const newTask = {
+            _id: props._id,
+            text: props.text,
+            status: props.status,
+            start: props.start,
+            end: props.end,
+            priority: props.priority
+        };
+        console.log(props);
+
+        const name = event.target.name;
+        const value = event.target.value;
+        if(name === "status"){
+            newTask.status = value;
+            todoList.editTodo(newTask);
         }
+    }
 
   return (
     <div>
@@ -51,7 +67,7 @@ const TodoTask = props => {
                             {props.text}
                             </div>
                         <div className='grid-item-tasks-status' >
-                        <select name="status" className='custom-select'>
+                        <select name="status" className='custom-select' onChange={statusHandler}>
                             <option value="" selected disabled hidden>{props.status}</option>
                             <option value="Not started">Not started</option>
                             <option value="In progress">In progress</option>

@@ -14,7 +14,7 @@ export function TodosContextProvider(props) {
 
     const [userTodos, setUserTodos] = useState([]);
     const {user} = useAuthContext();
-
+    console.log(userTodos);
     
     async function getTasks () {
         try {
@@ -82,21 +82,21 @@ export function TodosContextProvider(props) {
             console.log(err.message || 'Something went wrong, please try again.');
           }
         setUserTodos(previousTodos => {
-            return previousTodos.filter(todo => todo.id !== id);
+            return previousTodos.filter(todo => todo._id !== id);
         });
         getTasks();
     }
 
     async function editTaskHandler(todo){
         try {
-            const response = await fetch('/api/todos/'+ todo.id, {
+            const response = await fetch('/api/todos/'+ todo._id, {
               method: 'PATCH',
               headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${user.token}`
               },
               body: JSON.stringify({
-                id: todo.id,
+                _id: todo._id,
                 text: todo.text,
                 status: todo.status,
                 start: todo.start,
@@ -113,7 +113,7 @@ export function TodosContextProvider(props) {
             
             setUserTodos(prevState => {
                 const newTodo = prevState.map(obj => {
-                    if(obj.id === todo.id){
+                    if(obj._id === todo._id){
                         return {...obj, status:todo.status,
                                     text:todo.text,
                                     start:todo.start,
