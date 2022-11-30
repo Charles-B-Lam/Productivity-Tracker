@@ -1,5 +1,5 @@
 //passing the structure of user document when we save them to the database
-//Mongose won't let us save to database unless we stick to teh schema below
+//Mongose won't let us save to database unless we stick to the schema below
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
@@ -8,13 +8,13 @@ const validator = require('validator')
 
 const Schema = mongoose.Schema
 
-//for unique, if someone already signup with that email, then mongoose won
-//allow the email in the database since it already exist
+//we want email to be unique because if someone already signup with that email, 
+//then mongoose won allow the email in the database since it already exist
 const userSchema = new Schema({
     email: {
         type: String,
         required: true, 
-        unique: true
+        unique: true //we want this to be unqiue 
     },
     password: {
         type: String,
@@ -22,13 +22,14 @@ const userSchema = new Schema({
     }
 })
 
-//static signup method is method you create on your own
+//Here we are making our own static method on a model. 
+//we can use this method to signup user and save them in the database
 //we are trying to hash password before we save them to the database. 
 //So we are using bCrypt to hash password. 
 //Bcrypt is hashing function that can hash our password in a secure way.
 //even if ppl able to get into the database, the password would still be procted.
 userSchema.statics.signup = async function(email, password) {
-    //validation for email and pw
+    //Here is just validation for email and pw
     if(!email || !password){
         throw Error('All fields must be filled')
     }
@@ -60,7 +61,7 @@ userSchema.statics.signup = async function(email, password) {
     return user
 }
 
-//static login method
+//This is for the login method
 userSchema.statics.login = async function(email, password){
     if(!email || !password){
         throw Error('All fields must be filled')

@@ -8,13 +8,14 @@ const Signup = () => {
   const [password, setPassword] = useState('')
   const {signup, error, isLoading} = useSignup()
 
+  //we using our customHook to signup the user when they click submit
+  //we gonna be sending that post request to the server to handle that signup 
   const handleSubmit = async(e) =>{
     e.preventDefault()
-
+    
     await signup(email, password)
 
   }
-
   return (
     <div className="container">
             <div className="app-wrapper">
@@ -52,7 +53,8 @@ const Signup = () => {
                       Signup
                     </button>
                 </div>
-                {error && <div className="error">{error}</div>}
+                {/*It gonna return error if user enter wrong email or short password etc. */}
+                {error && <div className="error">{error}</div>} 
                 </form>
 
             </div>

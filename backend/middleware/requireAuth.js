@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/userModel')
 
+//This is the middleware function. It gonna help us with allowing only authenicated user
+//to be able to use the component
 const requireAuth = async(req, res, next) => {
-
     
     //verify authentication
     const{ authorization } = req.headers

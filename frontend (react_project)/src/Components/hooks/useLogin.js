@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {useAuthContext} from './useAuthContext'
 
+//This is the useLogin hook. It similar to the signup
 export const useLogin = () =>{
     const [error, setError] = useState(null)
     const [isLoading, setIsLoading] = useState(null)

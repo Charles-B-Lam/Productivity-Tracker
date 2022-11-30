@@ -8,7 +8,7 @@ const Login = () => {
 
   const {login, error, isLoading} = useLogin()
 
-
+//It gonna be a async function because we gonna have to make a request in the back end
   const handleSubmit = async(e) =>{
     e.preventDefault()
 
@@ -30,7 +30,8 @@ const Login = () => {
                     <input 
                     className="input" 
                     type="email"   
-                    onChange={(e) => setEmail(e.target.value)}
+                    //everytime a user type something, we gonna update it to our email state
+                    onChange={(e) => setEmail(e.target.value)} //when value change, we want to update the state
                     value={email}
                     />
              
@@ -49,7 +50,8 @@ const Login = () => {
 
                 {/*This is the signup button */}
                 <div>
-                    <button className="submit" disabled={isLoading}>
+                  {/*disable loading if the loading is true */}
+                    <button className="submit" disabled={isLoading}> 
                       Login
                     </button>
                 </div>
